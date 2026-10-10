@@ -174,3 +174,56 @@ slide title, census logo, left black bar and page number painted white (by
 their PDF positions) and the rest trimmed to content, so callouts that reach
 up beside the title survive. Charts that combine several sub-charts keep their
 in-chart labels.
+
+## 2018 Population Analysis (mirrored)
+
+`public/2018/` is the original 2013-2018 web report, mirrored from its S3
+site (`http://brccensus.2018.popanalysis.s3-website-us-west-1.amazonaws.com/`)
+by `.afterburn/mirror-2018.sh`. It's R Markdown/pandoc output with charts
+embedded as base64 PNGs and a Codrops "Multi-Level Menu" for navigation, not
+Quarto or bookdown, and no source repo survives (murrs's public repos start at
+2022). Changes from the mirror, all mechanical:
+
+- wget saved the feather icon fonts with their `?1gafuo` cache-buster in the
+  filename; renamed to plain `feather.*` and the CSS `url()`s to match.
+- `bin/add-year 2018 "2013–2018 Population Analysis"`, then its landing-page
+  line moved below the 2013-2022 entry (the script always inserts at the top).
+- `home-link.js` gained a third case for this menu (`#ml-menu
+  ul[data-menu="main"]`), with an inline SVG arrow since the page has no icon
+  font with one.
+
+Left as-is: the intro's "PDF version ... here" link still points at the
+census team's Google Drive copy, and a never-triggered `.content--loading`
+spinner in `demo.css` still references the S3 host.
+
+## 2013-2019 PDF reports
+
+The old Census Archive linked these years only as PDFs, scattered across
+history.burningman.org, S3 and Google Drive. We serve our own copies in one
+folder, named:
+
+    public/pdf/<year>-<type>.pdf
+
+- `<year>` is the census year; a report covering several years (2013-2017,
+  2013-2019) is filed under its last year.
+- `<type>` comes from the report's own title, one of `census-report`,
+  `afterburn-report`, `expanded-report`, `summary-report`,
+  `population-analysis`.
+- Lowercase and hyphens only. The original filenames are recorded below, not
+  reused. Prebuilt years keep their generator's names (2022's `_main.pdf`).
+
+`.afterburn/fetch-pdfs.sh` downloads them straight into `public/pdf/` under
+these names and skips any already there (run it in your own Terminal: the
+sandboxes can't reach these hosts).
+
+| Local name | Original |
+|---|---|
+| `2013-census-report.pdf` | history.burningman.org `BM13_BRC_Census_Report.pdf` |
+| `2014-afterburn-report.pdf` | history.burningman.org `Census-2014-Afterburn.pdf` |
+| `2015-afterburn-report.pdf` | history.burningman.org `BRC-Census-2015.pdf` |
+| `2015-expanded-report.pdf` | history.burningman.org `2015-Expanded-Census-Report.pdf` |
+| `2016-population-analysis.pdf` | Google Drive `0BxJfvV_7__jqRTlpVHRWbGZIMkE` (cover: "2013-2016 Population Analysis"; image-only, no text layer). The old page links both 2016 reports to this file, so the 2016 AfterBurn Report is missing. |
+| `2017-summary-report.pdf` | S3 `brccensus.public.reports/2017 Docs/05.22.18 2013-2017 Summary Report.pdf` |
+| `2017-population-analysis.pdf` | S3 `brccensus.public.reports/2017 Docs/05.22.18 2013-2017 Population Analysis.pdf` |
+| `2018-population-analysis.pdf` | history.burningman.org `2019-BRC-Census-Population-Analysis-2.pdf` (filename says 2019, but the cover says "2013-2018 Population Analysis") |
+| `2019-population-analysis.pdf` | history.burningman.org `BRC-Census-Population-Analysis-2013-2019.pdf` |
