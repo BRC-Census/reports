@@ -31,6 +31,18 @@ writes `<base href=".../2025/">` so relative assets resolve inside the year
 folder. Re-add it when dropping in a new year's build, and link years from the
 landing page with a trailing slash (`2026/`).
 
+## Home link
+
+`public/home-link.js` appends a "Home" item (linking to `../`) to the end of
+each report's sidebar: Quarto's `#quarto-sidebar` menu or GitBook's
+`ul.summary`. Every year page loads it with one `<script src="../home-link.js">`
+line near the top of `<head>`, after `subdir-base` in each `index.html`. Add
+that line to every page of a new year's build.
+
+The `$ is not defined` console error on pages with tables comes from
+kableExtra's `kePrint.js` expecting jQuery, which Quarto doesn't load. It was
+there before and is harmless.
+
 ## New years: copy the whole build
 
 Quarto 1.6+ names the theme stylesheet with a hash
