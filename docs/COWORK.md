@@ -196,6 +196,27 @@ Left as-is: the intro's "PDF version ... here" link still points at the
 census team's Google Drive copy, and a never-triggered `.content--loading`
 spinner in `demo.css` still references the S3 host.
 
+## 2019 Population Analysis (recovered from the Internet Archive)
+
+`public/2019/` is the 2013-2019 web report as it stood at
+blackrockcitycensus.org before the 2013-2022 report replaced it: the same
+R Markdown/Codrops-menu site as 2018, updated a year later. The Internet
+Archive's Oct 31, 2020 snapshots (CSS/JS/fonts from 2021-22, byte-identical
+scripts to 2018's) were fetched as original bytes (`id_` URLs) by
+`.afterburn/fetch-2017-2019.sh`, which skips files it already has and waits
+5 s between requests (the Archive refuses connections when rushed). The URL
+list is `.afterburn/ia-2019.txt`.
+
+Unchanged apart from `bin/add-year 2019 "2013–2019 Population Analysis"`
+(base fix, Back link via `home-link.js`'s menu case) and the landing line,
+which carries the PDF too. One fix: leftover "2013-2018" metadata (the
+`<title>` of `principles.html` and a stray one in `eventinfo.html`, plus four
+pages' meta descriptions) now says "2013-2019" like the rest; a sentence in
+`visualizations.html` that mentions 2013-2018 is the authors' text and stays.
+Kept as found: the CSS keeps its `?1gafuo`
+cache-busters (Pages ignores the query); `img/loading.svg` was never archived
+and is unused.
+
 ## 2017 Population Analysis (rebuilt from its PDF)
 
 `public/2017/` is generated from `public/pdf/2017-population-analysis.pdf`
