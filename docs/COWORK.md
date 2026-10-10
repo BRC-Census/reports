@@ -31,8 +31,10 @@ writes `<base href=".../2025/">` so relative assets resolve inside the year
 folder. Re-add it when dropping in a new year's build, and link years from the
 landing page with a trailing slash (`2026/`).
 
-## Known gaps
+## New years: copy the whole build
 
-- `2025/index.html` references `site_libs/bootstrap/bootstrap-8da5b4...min.css`,
-  which isn't in the repo; re-copy `site_libs/bootstrap` from the 2025 Quarto
-  build.
+Quarto 1.6+ names the theme stylesheet with a hash
+(`site_libs/bootstrap/bootstrap-<hash>.min.css`). Copy a year's entire
+rendered output, not hand-picked files: 2025 once shipped without that
+stylesheet and rendered unstyled until it was restored from
+blackrockcitycensus.org.
