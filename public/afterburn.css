@@ -61,7 +61,11 @@ h3 { font-size: 1.3rem; font-weight: 700; line-height: 1.25; margin: 2rem 0 0.75
 .cover img { display: block; width: 100%; height: auto; }
 main ul ul { margin-top: 0.25rem; }
 main li { margin-bottom: 0.35rem; }
-.chart.part { aspect-ratio: var(--w, 385) / var(--h); }
+/* Window of --h native px. The height comes from a spacer whose padding is
+   a % of the figure's own width, not aspect-ratio: WebKit (all iPhone
+   browsers) lets an aspect-ratio box grow to fit the image. */
+.chart.part::before { content: ""; display: block; padding-top: calc(var(--h) / var(--w, 385) * 100%); }
+.chart.part img { position: absolute; top: 0; left: 0; }
 h4 { font-size: 1.1rem; font-weight: 700; line-height: 1.25; margin: 1.5rem 0 0.75rem; }
 .sidebar ul ul { padding-left: 1rem; }
 .sidebar ul ul li { font-size: 14.5px; }

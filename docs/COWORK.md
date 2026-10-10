@@ -131,7 +131,10 @@ sharing `public/afterburn.css`. Goals, in priority order:
   width, so it scales). For a chart in the middle of a multi-chart image, add
   class `part` and `--h: H` to show only H native pixels from there
   (`aspect-ratio` W/H). Crops were found by OCR'ing each title line's position
-  and trimming blank rows between titles. Where a title shares rows with the chart (2011's age,
+  and trimming blank rows between titles. Two iPhone (WebKit) pitfalls, both
+  fine in desktop Chrome and its phone emulation: no `loading="lazy"` on
+  chart images (a reused, shifted, clipped image can stay blank), and size
+  the `part` window with the `::before` padding spacer, not `aspect-ratio`. Where a title shares rows with the chart (2011's age,
   attendance and education charts), cropping would cut the chart, so instead
   each title line gets a white `<span class="mask">` positioned in percentages
   (also used on four 2007 regional charts whose top axis number sits level
