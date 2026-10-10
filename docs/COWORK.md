@@ -33,7 +33,7 @@ landing page with a trailing slash (`2026/`).
 
 ## Home link
 
-`public/home-link.js` appends a "Back" item (with a left-arrow icon) (linking to `../`) to the end of
+`public/home-link.js` appends a "Back" item (with a circled left-arrow icon) (linking to `../`) to the end of
 each report's sidebar: Quarto's `#quarto-sidebar` menu or GitBook's
 `ul.summary`. Every year page loads it with one `<script src="../home-link.js">`
 line near the top of `<head>`, after `subdir-base` in each `index.html`. Add
