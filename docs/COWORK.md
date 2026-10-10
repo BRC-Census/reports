@@ -75,11 +75,18 @@ predates these changes and is harmless.
 2005-2011 census results were AfterBurn pages on history.burningman.org,
 mostly a column of chart images with each question baked into the image.
 They're rebuilt as hand-written pages in `public/2005/`-`public/2011/`, all
-sharing `public/afterburn.css`. Rule: **modernize the HTML only, never alter
-the content.** Same chart order as the original, titles verbatim including
-their typos ("llived", "martial status" in 2007; "vising", "Blackrock" in
-2011), no invented headings. 2006 shows `past_help_with_group_art.jpg` twice
-because the original does.
+sharing `public/afterburn.css`. Goals, in priority order:
+
+1. **Maintain the original report content.** Same charts in the same order,
+   titles verbatim including their typos ("llived", "martial status" in 2007;
+   "vising", "Blackrock" in 2011), image files untouched. 2006 shows
+   `past_help_with_group_art.jpg` twice because the original does.
+2. **Extract the chart titles and CSS-crop the images**, so every chart's
+   title is real HTML text and every chart in a multi-chart image is shown on
+   its own.
+3. **Apply some structure to organize the content:** short group labels and
+   parent categories (see "Structure" below). These are the only words not
+   taken from the original reports, and they never reorder charts.
 
 - Title: "Black Rock City Census <year> After Burn Report" in `<title>` and the
   sidebar; the `<h1>` is just "<year> After Burn Report". Landing-page link
@@ -92,17 +99,43 @@ because the original does.
   > self-selected Census takers on-playa to a weighted online survey conducted
   > after the Man burns.
 
-- Original structure is kept: 2007's four sub-pages become `<h2>` groups
-  (Personal Attributes, Family and Relationships, Income and Spending,
-  Participation and Activities) with each chart under an `<h3>`. 2009 already
-  had its questions as HTML text above untitled charts, so those become the
-  headings verbatim, with the "Question:" prefix styled as a muted label.
+- Structure, modeled on 2022's numbered sections but without numbers: an
+  `<h2>` group label of a few words (from the image file name plus a read of
+  its questions, e.g. `AB_05_projects_p.jpg` -> "Projects"), then each chart's
+  title verbatim as an `<h3>`. Consecutive charts on one topic share a label
+  ("Sexual Orientation" over 2006's bisexual/gay/straight); chart order never
+  changes. Each question heading keeps the old section id, so earlier anchors
+  still work.
+- Above the labels sit a few parent categories as `<h2>` (label `<h3>`,
+  question `<h4>`), and the sidebar nests labels under them. Parents cover
+  consecutive labels only, never reordering: mostly "About You", "At Burning
+  Man", then a page-specific one ("Money and Civic Life" 2005, "Money and
+  Travel" 2006, "Relationships and Home" 2008, "Values and Opinions" and
+  "Reasons" 2009). 2007's parents are its four original sub-pages (Personal
+  Attributes, Family and Relationships, Income and Spending, Participation and
+  Activities). 2010 stays flat (label `<h2>`, question `<h3>`): its nine labels
+  alternate between personal and event topics, so parents would need
+  reordering.
+- 2009 already had its questions as HTML text above untitled charts, so those
+  are the question headings verbatim, with the "Question:" prefix styled as a
+  muted label.
+- An image holding several titled charts is shown once per chart, each under
+  its own question heading (2005 has many, e.g. activism's four pies; 2007 has
+  residence, religious services, decompressions, free services and the ten
+  regional burns). Exceptions: 2005's money-opinions panel is one chart whose
+  bar labels share a legend, and 2007's `years_BM.gif` is one chart in two
+  panels, so both stay whole.
 - Baked-in titles become HTML headings and are hidden with CSS only; the image
   files are untouched. `<figure class="chart" style="--w: W; --crop: N">`
   shifts the image up by N of its W native pixels (computed as a percentage of
-  width, so it scales). Where a title shares rows with the chart (2011's age,
+  width, so it scales). For a chart in the middle of a multi-chart image, add
+  class `part` and `--h: H` to show only H native pixels from there
+  (`aspect-ratio` W/H). Crops were found by OCR'ing each title line's position
+  and trimming blank rows between titles. Where a title shares rows with the chart (2011's age,
   attendance and education charts), cropping would cut the chart, so instead
-  each title line gets a white `<span class="mask">` positioned in percentages.
+  each title line gets a white `<span class="mask">` positioned in percentages
+  (also used on four 2007 regional charts whose top axis number sits level
+  with the title).
   2005's money-opinions panel stays uncropped with no heading; images with more
   titled charts lower down are left whole.
 - An image that is only text (2005's spending averages) becomes HTML text with
@@ -118,7 +151,9 @@ history.burningman.org; quote anything with `?` for zsh) into the gitignored
 heights were read with tesseract OCR on each image's title band, stopping at
 the first mostly-numeric line (axis labels), then every chart was checked by
 eye in a rendered screenshot; OCR mistakes (`|` for "I", "woe" for "were")
-were fixed by hand against the image.
+were fixed by hand against the image. The group labels and splits were
+applied by `.afterburn/build.py` and `nest.py` (gitignored; already run, not re-runnable
+on the new pages).
 
 ## 2012 Weighted Results
 

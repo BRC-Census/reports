@@ -61,3 +61,7 @@ h3 { font-size: 1.3rem; font-weight: 700; line-height: 1.25; margin: 2rem 0 0.75
 .cover img { display: block; width: 100%; height: auto; }
 main ul ul { margin-top: 0.25rem; }
 main li { margin-bottom: 0.35rem; }
+.chart.part { aspect-ratio: var(--w, 385) / var(--h); }
+h4 { font-size: 1.1rem; font-weight: 700; line-height: 1.25; margin: 1.5rem 0 0.75rem; }
+.sidebar ul ul { padding-left: 1rem; }
+.sidebar ul ul li { font-size: 14.5px; }
