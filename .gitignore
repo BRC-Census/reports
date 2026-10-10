@@ -46,3 +46,6 @@ po/*~
 rsconnect/
 
 .DS_Store
+
+# Editor swap files
+*.swp
