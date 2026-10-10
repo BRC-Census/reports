@@ -196,6 +196,38 @@ Left as-is: the intro's "PDF version ... here" link still points at the
 census team's Google Drive copy, and a never-triggered `.content--loading`
 spinner in `demo.css` still references the S3 host.
 
+## 2017 Population Analysis (rebuilt from its PDF)
+
+`public/2017/` is generated from `public/pdf/2017-population-analysis.pdf`
+(152 landscape slides) by `.afterburn/build-pdf-report.py`, styled by
+`afterburn.css` + `popanalysis.css`:
+
+    python3 .afterburn/build-pdf-report.py public/pdf/2017-population-analysis.pdf \
+        public/2017 "Black Rock City Census 2013-2017 Population Analysis" \
+        "2013-2017 Population Analysis"
+
+(needs `pip install pymupdf pillow`). What it does, in visible (de-rotated)
+coordinates:
+
+- Divider slides become `<h2>` sections; each slide's header band becomes an
+  `<h3>` topic and `<h4>` subtitle, repeated on continuation slides only once.
+  Slides before the first divider go under "Report Information".
+- Text stays text, verbatim: chart titles, notes (italic), fine print,
+  paragraphs (lines merged; bold/italic runs kept), bullet lists, and URLs made
+  clickable. Spaces the PDF omits between words are restored from glyph gaps.
+- Every group of touching images is rendered from the page as displayed
+  (not extracted raw: the PDF clips and overlays its images, e.g. a chart drawn
+  as two pieces) and sized to its share of the slide width, so a separate
+  legend stays legend-sized. Text lying on a group is rendered with it.
+- "Complex" slides (more than three images, side-by-side pieces, or text over
+  images) and slides 7-10 and 13 (annotated diagrams) are rendered whole under
+  their HTML headings, with their text in the alt attribute: 53 of 152.
+- Slide 6's small table, laid out as positioned text, is a hand-written HTML
+  table (`OVERRIDES` in the script).
+- Images are PNG, 256 colors, at most 1400px wide, lazy-loaded (fine here: none
+  are cropped, unlike the After Burn charts) and link to themselves for zooming
+  on phones. About 11 MB in all.
+
 ## 2013-2019 PDF reports
 
 The old Census Archive linked these years only as PDFs, scattered across
