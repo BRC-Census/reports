@@ -212,6 +212,10 @@ folder, named:
 - Lowercase and hyphens only. The original filenames are recorded below, not
   reused. Prebuilt years keep their generator's names (2022's `_main.pdf`).
 
+The landing page lists each as "<year> <Report Title> PDF" (e.g. "2017
+Population Analysis PDF"), in year order among the web reports; a year that
+also has a web version (2018) lists the PDF right after it.
+
 `.afterburn/fetch-pdfs.sh` downloads them straight into `public/pdf/` under
 these names and skips any already there (run it in your own Terminal: the
 sandboxes can't reach these hosts).
