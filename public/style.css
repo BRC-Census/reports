@@ -50,3 +50,20 @@ h1 {
     padding-left: 1rem;
   }
 }
+
+/* A report with both a web page and a PDF: the PDF link sits after the title
+   and shows on hover or keyboard focus; touch screens (no hover) always show it. */
+.reports .pdf {
+  visibility: hidden;
+}
+
+.reports li:hover .pdf,
+.reports li:focus-within .pdf {
+  visibility: visible;
+}
+
+@media (hover: none) {
+  .reports .pdf {
+    visibility: visible;
+  }
+}

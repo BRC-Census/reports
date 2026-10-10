@@ -207,14 +207,18 @@ folder, named:
 - `<year>` is the census year; a report covering several years (2013-2017,
   2013-2019) is filed under its last year.
 - `<type>` comes from the report's own title, one of `census-report`,
-  `afterburn-report`, `expanded-report`, `summary-report`,
+  `weighted-results`, `afterburn-report`, `expanded-report`, `summary-report`,
   `population-analysis`.
 - Lowercase and hyphens only. The original filenames are recorded below, not
   reused. Prebuilt years keep their generator's names (2022's `_main.pdf`).
 
-The landing page lists each as "<year> <Report Title> PDF" (e.g. "2017
-Population Analysis PDF"), in year order among the web reports; a year that
-also has a web version (2018) lists the PDF right after it.
+On the landing page, a PDF-only report is listed as "<year> <Report Title>
+PDF" (e.g. "2017 Population Analysis PDF"), in year order. A report with
+both a web page and a PDF is one line: the web link, then
+`<a class="pdf">PDF</a>`, which `style.css` hides until the line is hovered
+or focused (always shown on touch screens). 2012, 2018 and 2022 work this
+way; 2022 links its own bookdown `_main.pdf`. 2012's PDF is the source deck
+for the 2012 page, saved as `public/pdf/2012-weighted-results.pdf`.
 
 `.afterburn/fetch-pdfs.sh` downloads them straight into `public/pdf/` under
 these names and skips any already there (run it in your own Terminal: the
