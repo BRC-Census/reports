@@ -49,3 +49,6 @@ rsconnect/
 
 # Editor swap files
 *.swp
+
+# Downloaded AfterBurn source pages (working copies, not published)
+.afterburn/

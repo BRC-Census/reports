@@ -69,3 +69,53 @@ What the script adds, if it ever has to be done by hand:
 The `$ is not defined` console error on pages with tables comes from
 kableExtra's `kePrint.js` expecting jQuery, which Quarto doesn't load. It
 predates these changes and is harmless.
+
+## Pre-2013 After Burn reports
+
+2005-2011 census results were AfterBurn pages on history.burningman.org,
+mostly a column of chart images with each question baked into the image.
+They're rebuilt as hand-written pages in `public/2005/`-`public/2011/`, all
+sharing `public/afterburn.css`. Rule: **modernize the HTML only, never alter
+the content.** Same chart order as the original, titles verbatim including
+their typos ("llived", "martial status" in 2007; "vising", "Blackrock" in
+2011), no invented headings. 2006 shows `past_help_with_group_art.jpg` twice
+because the original does.
+
+- Title: "Black Rock City Census <year> After Burn Report" in `<title>` and the
+  sidebar; the `<h1>` is just "<year> After Burn Report". Landing-page link
+  text: "<year> After Burn Report", newest first, below the 2013-2022 entry.
+- First section is "Welcome" with exactly this text, on every pre-2013 page:
+
+  > While BRC Census has been producing reports since 2002, it is hard to
+  > compare recent data with reports from earlier years (before 2013) because
+  > of important differences in methodology, from a convenience sample of
+  > self-selected Census takers on-playa to a weighted online survey conducted
+  > after the Man burns.
+
+- Original structure is kept: 2007's four sub-pages become `<h2>` groups
+  (Personal Attributes, Family and Relationships, Income and Spending,
+  Participation and Activities) with each chart under an `<h3>`. 2009 already
+  had its questions as HTML text above untitled charts, so those become the
+  headings verbatim, with the "Question:" prefix styled as a muted label.
+- Baked-in titles become HTML headings and are hidden with CSS only; the image
+  files are untouched. `<figure class="chart" style="--w: W; --crop: N">`
+  shifts the image up by N of its W native pixels (computed as a percentage of
+  width, so it scales). Where a title shares rows with the chart (2011's age,
+  attendance and education charts), cropping would cut the chart, so instead
+  each title line gets a white `<span class="mask">` positioned in percentages.
+  2005's money-opinions panel stays uncropped with no heading; images with more
+  titled charts lower down are left whole.
+- An image that is only text (2005's spending averages) becomes HTML text with
+  the original wording.
+- Each page carries the `subdir-base` script and its own inline "Back" link
+  (inline SVG arrow, since these pages have no icon font), so it doesn't use
+  `home-link.js` or `bin/add-year`.
+
+How 2006-2011 were built, for adding another year (2001, 2012): download the
+page HTML and images on the Mac (this sandbox can't reach
+history.burningman.org; quote anything with `?` for zsh) into the gitignored
+`.afterburn/` working folder and `public/<year>/images/`. Titles and crop
+heights were read with tesseract OCR on each image's title band, stopping at
+the first mostly-numeric line (axis labels), then every chart was checked by
+eye in a rendered screenshot; OCR mistakes (`|` for "I", "woe" for "were")
+were fixed by hand against the image.
