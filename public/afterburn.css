@@ -56,3 +56,8 @@ h2 {
 .chart .mask { position: absolute; background: #fff; }
 h3 { font-size: 1.3rem; font-weight: 700; line-height: 1.25; margin: 2rem 0 0.75rem; }
 .label { color: var(--muted); font-weight: 400; }
+.subtitle-line { color: var(--muted); font-size: 1.25rem; margin: 0 0 1.25rem; }
+.cover { margin: 0 0 1.5rem; max-width: 465px; }
+.cover img { display: block; width: 100%; height: auto; }
+main ul ul { margin-top: 0.25rem; }
+main li { margin-bottom: 0.35rem; }

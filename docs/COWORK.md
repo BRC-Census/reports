@@ -119,3 +119,20 @@ heights were read with tesseract OCR on each image's title band, stopping at
 the first mostly-numeric line (axis labels), then every chart was checked by
 eye in a rendered screenshot; OCR mistakes (`|` for "I", "woe" for "were")
 were fixed by hand against the image.
+
+## 2012 Weighted Results
+
+`public/2012/` comes from the census team's 44-slide deck
+`bm12_weighted_census_data-v6.pdf` (history.burningman.org uploads; a copy is
+in the gitignored `.afterburn/`). Same rules as the After Burn pages: wording
+verbatim (including the divider's "Sociodeomographic"), original order, the
+Welcome section, `afterburn.css`. Title "Black Rock City Census 2012 Weighted
+Results", `<h1>` "2012 Weighted Results" from the deck's cover.
+
+The PDF has real text, so text slides became HTML word for word (no OCR), the
+six black divider slides became `<h2>` sections, and each chart slide's title
+became an `<h3>`. Chart images were rendered from the PDF at 200 dpi with the
+slide title, census logo, left black bar and page number painted white (by
+their PDF positions) and the rest trimmed to content, so callouts that reach
+up beside the title survive. Charts that combine several sub-charts keep their
+in-chart labels.
