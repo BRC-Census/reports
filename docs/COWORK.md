@@ -259,7 +259,7 @@ folder, named:
 
 - `<year>` is the census year; a report covering several years (2013-2017,
   2013-2019) is filed under its last year.
-- `<type>` comes from the report's own title, one of `census-report`,
+- `<type>` comes from the report's own title, one of
   `weighted-results`, `afterburn-report`, `expanded-report`, `summary-report`,
   `population-analysis`.
 - Lowercase and hyphens only. The original filenames are recorded below, not
@@ -279,7 +279,7 @@ sandboxes can't reach these hosts).
 
 | Local name | Original |
 |---|---|
-| `2013-census-report.pdf` | history.burningman.org `BM13_BRC_Census_Report.pdf` |
+| `2013-weighted-results.pdf` | history.burningman.org `BM13_BRC_Census_Report.pdf` (cover: "Weighted Results Report") |
 | `2014-afterburn-report.pdf` | history.burningman.org `Census-2014-Afterburn.pdf` |
 | `2015-afterburn-report.pdf` | history.burningman.org `BRC-Census-2015.pdf` |
 | `2015-expanded-report.pdf` | history.burningman.org `2015-Expanded-Census-Report.pdf` |
