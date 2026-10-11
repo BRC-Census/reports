@@ -72,7 +72,7 @@ h4 { font-size: 1.1rem; font-weight: 700; line-height: 1.25; margin: 1.5rem 0 0.
 /* 2001: a window that also clips --e px from the left, right and bottom
    (its GIFs have a 1px frame). Visible area: (--w - 2*--e) x --h native px,
    starting --crop px down and --e px in; padding spacer as for .part. */
-.chart.edged { max-width: calc((var(--w) - 2 * var(--e)) * 1px); }
+.chart.edged { max-width: calc(var(--max, calc(var(--w) - 2 * var(--e))) * 1px); }   /* --max: display width */
 .chart.edged::before { content: ""; display: block; padding-top: calc(var(--h) / (var(--w) - 2 * var(--e)) * 100%); }
 .chart.edged img {
   position: absolute; top: 0; left: 0;
