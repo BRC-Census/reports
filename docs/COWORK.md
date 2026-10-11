@@ -260,18 +260,22 @@ folder, named:
 - `<year>` is the census year; a report covering several years (2013-2017,
   2013-2019) is filed under its last year.
 - `<type>` comes from the report's own title, one of
-  `weighted-results`, `afterburn-report`, `expanded-report`, `summary-report`,
-  `population-analysis`.
+  `weighted-results`, `expanded-report`, `summary-report`,
+  `population-analysis`. 2012 and later are all weighted results, so the
+  2014-2015 decks the old site called "AfterBurn" reports are
+  `weighted-results` too. The PDFs stay as published (2015's cover still says
+  "AfterBurn Report"); everything in HTML, including any future web version of
+  a 2013-2015 deck, calls them "<year> Weighted Results".
 - Lowercase and hyphens only. The original filenames are recorded below, not
   reused. Prebuilt years keep their generator's names (2022's `_main.pdf`).
 
-On the landing page, a PDF-only report is listed as "<year> <Report Title>
-PDF" (e.g. "2017 Population Analysis PDF"), in year order. A report with
-both a web page and a PDF is one line: the web link, then
-`<a class="pdf">PDF</a>`, which `style.css` hides until the line is hovered
-or focused (always shown on touch screens). 2012, 2018 and 2022 work this
-way; 2022 links its own bookdown `_main.pdf`. 2012's PDF is the source deck
-for the 2012 page, saved as `public/pdf/2012-weighted-results.pdf`.
+On the landing page, a PDF-only report is one link, "<year> <Title>, PDF"
+(e.g. "2016 Population Analysis, PDF"); 2012-2015 decks are titled "Weighted
+Results". A report with both a web page and a PDF is the web link followed by
+`<span class="pdf">, <a>PDF</a></span>`, which `style.css` hides until the line
+is hovered or focused (always shown on touch screens): 2012, 2017, 2018, 2019
+and 2022, whose PDF is its own bookdown `_main.pdf`. 2012's PDF is the source
+deck for the 2012 page, saved as `public/pdf/2012-weighted-results.pdf`.
 
 `.afterburn/fetch-pdfs.sh` downloads them straight into `public/pdf/` under
 these names and skips any already there (run it in your own Terminal: the
@@ -280,8 +284,8 @@ sandboxes can't reach these hosts).
 | Local name | Original |
 |---|---|
 | `2013-weighted-results.pdf` | history.burningman.org `BM13_BRC_Census_Report.pdf` (cover: "Weighted Results Report") |
-| `2014-afterburn-report.pdf` | history.burningman.org `Census-2014-Afterburn.pdf` |
-| `2015-afterburn-report.pdf` | history.burningman.org `BRC-Census-2015.pdf` |
+| `2014-weighted-results.pdf` | history.burningman.org `Census-2014-Afterburn.pdf` (cover: "Weighted Results Report") |
+| `2015-weighted-results.pdf` | history.burningman.org `BRC-Census-2015.pdf` (cover: "AfterBurn Report") |
 | `2015-expanded-report.pdf` | history.burningman.org `2015-Expanded-Census-Report.pdf` |
 | `2016-population-analysis.pdf` | Google Drive `0BxJfvV_7__jqRTlpVHRWbGZIMkE` (cover: "2013-2016 Population Analysis"; image-only, no text layer). The old page links both 2016 reports to this file, so the 2016 AfterBurn Report is missing. |
 | `2017-summary-report.pdf` | S3 `brccensus.public.reports/2017 Docs/05.22.18 2013-2017 Summary Report.pdf` |
