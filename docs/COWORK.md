@@ -223,7 +223,9 @@ Quarto or bookdown, and no source repo survives (murrs's public repos start at
   ul[data-menu="main"]`), with an inline SVG arrow since the page has no icon
   font with one.
 
-Left as-is: the intro's "PDF version ... here" link still points at the
+Main `<h1>` (index.html and toc.html) changed from "BRC Census Population
+Analysis, 2013-2018" to "2013-2018 Population Analysis" to match the other
+Population Analyses; `<title>`s are unchanged. Left as-is: the intro's "PDF version ... here" link still points at the
 census team's Google Drive copy, and a never-triggered `.content--loading`
 spinner in `demo.css` still references the S3 host.
 
@@ -238,7 +240,8 @@ scripts to 2018's) were fetched as original bytes (`id_` URLs) by
 5 s between requests (the Archive refuses connections when rushed). The URL
 list is `.afterburn/ia-2019.txt`.
 
-Unchanged apart from `bin/add-year 2019 "2013–2019 Population Analysis"`
+Main `<h1>` changed to "2013-2019 Population Analysis" (as 2018). Otherwise
+unchanged apart from `bin/add-year 2019 "2013–2019 Population Analysis"`
 (base fix, Back link via `home-link.js`'s menu case) and the landing line,
 which carries the PDF too. One fix: leftover "2013-2018" metadata (the
 `<title>` of `principles.html` and a stray one in `eventinfo.html`, plus four
