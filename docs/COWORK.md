@@ -16,6 +16,9 @@ Notes for Claude and Woodie. Cross-project habits live in
   line, hidden ", PDF" included, so nothing wraps). The
   intro comes first in the HTML, so on phones it shows first and the list
   follows its closing "...check out the Census results through the years:".
+  The volunteer-team link points to https://volunteers.census.burningman.org/
+  and Burner Express to https://burnerexpress.burningman.org/ (the old page's
+  links were dead).
   The CSS is small and standalone, matching the reports' sidebar: Source Sans
   Pro, text `#343a40`, hover `#2761e3`, title 22.1px, links 15.725px, 46px left
   / 35px top margin (the Quarto sidebar's minimum offset).
