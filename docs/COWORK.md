@@ -293,7 +293,7 @@ rendered from the PDF as displayed.
 | `2016-population-analysis/` | `2016-population-analysis.pdf` | `build-scanned.py` (image-only PDF) with `.afterburn/2016-headings.tsv` |
 | `2016/` | `2016-weighted-results.pdf` | `build-scanned.py` with `.afterburn/2016-wr-headings.tsv` |
 | `2015/`, `2014/`, `2013/` | `<year>-weighted-results.pdf` | `build-deck.py` |
-| `2015-expanded-report/` | `2015-expanded-report.pdf` | `build-deck.py` |
+| `2015-annual-report/` | `2015-annual-report.pdf` | `build-deck.py` |
 
     python3 .afterburn/build-deck.py public/pdf/2014-weighted-results.pdf \
         public/2014 "Black Rock City Census 2014 Weighted Results" "2014 Weighted Results"
@@ -328,7 +328,7 @@ folder, named:
 - `<year>` is the census year; a report covering several years (2013-2017,
   2013-2019) is filed under its last year.
 - `<type>` comes from the report's own title, one of
-  `weighted-results`, `expanded-report`, `summary-report`,
+  `weighted-results`, `annual-report`, `summary-report`,
   `population-analysis`. 2012 and later are all weighted results, so the
   2014-2015 decks the old site called "AfterBurn" reports are
   `weighted-results` too. The PDFs stay as published (2015's cover still says
@@ -357,7 +357,7 @@ sandboxes can't reach these hosts).
 | `2013-weighted-results.pdf` | history.burningman.org `BM13_BRC_Census_Report.pdf` (cover: "Weighted Results Report") |
 | `2014-weighted-results.pdf` | history.burningman.org `Census-2014-Afterburn.pdf` (cover: "Weighted Results Report") |
 | `2015-weighted-results.pdf` | history.burningman.org `BRC-Census-2015.pdf` (cover: "AfterBurn Report") |
-| `2015-expanded-report.pdf` | history.burningman.org `2015-Expanded-Census-Report.pdf` |
+| `2015-annual-report.pdf` | history.burningman.org `2015-Expanded-Census-Report.pdf` |
 | `2016-population-analysis.pdf` | Google Drive `0BxJfvV_7__jqRTlpVHRWbGZIMkE` (cover: "2013-2016 Population Analysis"; image-only, no text layer). The old page links both 2016 reports to this file. |
 | `2016-weighted-results.pdf` | Supplied separately (cover: "2016 AfterBurn Report"; 40 slides, image-only) |
 | `2017-summary-report.pdf` | S3 `brccensus.public.reports/2017 Docs/05.22.18 2013-2017 Summary Report.pdf` |
