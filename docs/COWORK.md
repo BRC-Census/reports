@@ -249,6 +249,35 @@ coordinates:
   are cropped, unlike the After Burn charts) and link to themselves for zooming
   on phones. About 11 MB in all.
 
+## 2013-2017 Summary Report, 2013-2016 Population Analysis, 2013-2015 decks
+
+Every report on the old Census Archive now has a web version beside its PDF.
+All are generated into `public/<dir>/` and styled by `afterburn.css` +
+`popanalysis.css`; each script keeps text verbatim and shows charts as images
+rendered from the PDF as displayed.
+
+| Web dir | PDF | Built by |
+|---|---|---|
+| `2017-summary-report/` | `2017-summary-report.pdf` | `build-pdf-report.py` (2017 template; slide 3's survey table is an override) |
+| `2016/` | `2016-population-analysis.pdf` | `build-scanned.py` (image-only PDF) with `.afterburn/2016-headings.tsv` |
+| `2015/`, `2014/`, `2013/` | `<year>-weighted-results.pdf` | `build-deck.py` |
+| `2015-expanded-report/` | `2015-expanded-report.pdf` | `build-deck.py` |
+
+    python3 .afterburn/build-deck.py public/pdf/2014-weighted-results.pdf \
+        public/2014 "Black Rock City Census 2014 Weighted Results" "2014 Weighted Results"
+
+- `build-deck.py` (PowerPoint decks, three templates): divider slides become
+  `<h2>`, slide titles `<h3>` (repeats merged). Text slides (at most 3 images,
+  no text over an image, under half the slide) become paragraphs and bullet
+  lists with any photos; every other slide's body, below its title band and
+  left of the 2013-2014 template's black edge bar, is one rendered image with
+  the slide's text as alt text.
+- `build-scanned.py`: 2016 has no text layer. Headings are OCR'd from the
+  white-on-black title band, then checked by eye; corrections live in
+  `.afterburn/2016-headings.tsv` (tab-separated page and heading, " / "
+  between topic and subtitle). Each slide body is one image with its OCR text
+  as alt text only: OCR is never shown as visible text.
+
 ## 2013-2019 PDF reports
 
 The old Census Archive linked these years only as PDFs, scattered across
