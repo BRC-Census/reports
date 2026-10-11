@@ -41,7 +41,7 @@ h1 {
 }
 
 .reports a:hover,
-.reports a:focus {
+.reports a:focus-visible {
   color: var(--link-hover);
 }
 
@@ -52,18 +52,22 @@ h1 {
 }
 
 /* A report with both a web page and a PDF: the PDF link sits after the title
-   and shows on hover or keyboard focus; touch screens (no hover) always show it. */
+   and shows on hover or keyboard focus. It is transparent, not visibility:hidden,
+   so Tab can still reach it (a hidden link can't take focus, and the title's
+   blur would hide it mid-Tab). :focus-visible, not :focus-within, so a mouse
+   click, which leaves the link focused, doesn't keep it showing. Touch screens
+   (no hover) always show it. */
 .reports .pdf {
-  visibility: hidden;
+  opacity: 0;
 }
 
 .reports li:hover .pdf,
-.reports li:focus-within .pdf {
-  visibility: visible;
+.reports li:has(:focus-visible) .pdf {
+  opacity: 1;
 }
 
 @media (hover: none) {
   .reports .pdf {
-    visibility: visible;
+    opacity: 1;
   }
 }

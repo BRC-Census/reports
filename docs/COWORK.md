@@ -304,7 +304,9 @@ using the report's own span of years where it covers several (e.g.
 "2013–2016 Population Analysis, PDF", "2013–2017 Summary Report, PDF");
 2012-2015 decks are titled "Weighted Results". A report with both a web page and a PDF is the web link followed by
 `<span class="pdf">, <a>PDF</a></span>`, which `style.css` hides until the line
-is hovered or focused (always shown on touch screens): 2012, 2017, 2018, 2019
+is hovered or keyboard-focused (`:has(:focus-visible)`, not `:focus-within`,
+which kept it showing after a click; `opacity: 0`, not `visibility: hidden`,
+so Tab can reach it) (always shown on touch screens): 2012, 2017, 2018, 2019
 and 2022, whose PDF is its own bookdown `_main.pdf`. 2012's PDF is the source
 deck for the 2012 page, saved as `public/pdf/2012-weighted-results.pdf`.
 
