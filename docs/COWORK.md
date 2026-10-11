@@ -108,6 +108,8 @@ sharing `public/afterburn.css`. Goals, in priority order:
   > self-selected Census takers on-playa to a weighted online survey conducted
   > after the Man burns.
 
+- A question heading that only repeats its label (2001 and 2010 "Age") is left
+  out; its anchor id moves to the figure.
 - Structure, modeled on 2022's numbered sections but without numbers: an
   `<h2>` group label of a few words (from the image file name plus a read of
   its questions, e.g. `AB_05_projects_p.jpg` -> "Projects"), then each chart's
@@ -122,9 +124,9 @@ sharing `public/afterburn.css`. Goals, in priority order:
   Travel" 2006, "Relationships and Home" 2008, "Values and Opinions" and
   "Reasons" 2009). 2007's parents are its four original sub-pages (Personal
   Attributes, Family and Relationships, Income and Spending, Participation and
-  Activities). 2010 stays flat (label `<h2>`, question `<h3>`): its nine labels
-  alternate between personal and event topics, so parents would need
-  reordering.
+  Activities). 2010's labels alternate between personal and event topics, so following 2001
+  its charts are regrouped under About You and At Burning Man (Dates and Theme
+  Camp moved after Values).
 - 2009 already had its questions as HTML text above untitled charts, so those
   are the question headings verbatim, with the "Question:" prefix styled as a
   muted label.
@@ -156,7 +158,8 @@ sharing `public/afterburn.css`. Goals, in priority order:
   (inline SVG arrow, since these pages have no icon font), so it doesn't use
   `home-link.js` or `bin/add-year`.
 
-2001 is the one exception to "never reorder charts". Its old page was 43
+2001 and 2010 are the exceptions to "never reorder charts" (2010: see
+Structure above). Its old page was 43
 chart GIFs in what looks like file-listing order with no text at all, so its
 charts are regrouped to match 2005-2011's parents (About You, Burning Man
 Experience, Arrival and Departure, Camping, Life on the Playa, Spending,
