@@ -74,7 +74,7 @@ predates these changes and is harmless.
 
 2005-2011 census results were AfterBurn pages on history.burningman.org,
 mostly a column of chart images with each question baked into the image.
-They're rebuilt as hand-written pages in `public/2005/`-`public/2011/`, all
+They're rebuilt as hand-written pages in `public/2001/` and `public/2005/`-`public/2011/`, all
 sharing `public/afterburn.css`. Goals, in priority order:
 
 1. **Maintain the original report content.** Same charts in the same order,
@@ -147,7 +147,18 @@ sharing `public/afterburn.css`. Goals, in priority order:
   (inline SVG arrow, since these pages have no icon font), so it doesn't use
   `home-link.js` or `bin/add-year`.
 
-How 2006-2011 were built, for adding another year (2001, 2012): download the
+2001 is the one exception to "never reorder charts". Its old page was 43
+chart GIFs in what looks like file-listing order with no text at all, so its
+charts are regrouped to match 2005-2011's parents (About You, Burning Man
+Experience, Arrival and Departure, Camping, Life on the Playa, Spending,
+Afterward). Titles are typed from the images verbatim ("plya" x4, "loosing").
+Built by `.afterburn/build-2001.py` (titles, grouping, hand-set crops); images
+fetched by `.afterburn/fetch-2001.sh`. "Political Affiliation" shares rows with
+its legend, so its title is masked rather than cropped. Each GIF has a 1px
+dark frame, so every chart uses `.chart.edged` (`afterburn.css`), which also
+clips `--e: 2` px from the left, right and bottom.
+
+How 2006-2011 were built, for adding another year: download the
 page HTML and images on the Mac (this sandbox can't reach
 history.burningman.org; quote anything with `?` for zsh) into the gitignored
 `.afterburn/` working folder and `public/<year>/images/`. Titles and crop
