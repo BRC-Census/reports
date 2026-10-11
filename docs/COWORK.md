@@ -287,8 +287,8 @@ rendered from the PDF as displayed.
 | Web dir | PDF | Built by |
 |---|---|---|
 | `2017-summary-report/` | `2017-summary-report.pdf` | `build-pdf-report.py` (2017 template; slide 3's survey table is an override) |
-| `2016/` | `2016-population-analysis.pdf` | `build-scanned.py` (image-only PDF) with `.afterburn/2016-headings.tsv` |
-| `2016-weighted-results/` | `2016-weighted-results.pdf` | `build-scanned.py` with `.afterburn/2016-wr-headings.tsv` |
+| `2016-population-analysis/` | `2016-population-analysis.pdf` | `build-scanned.py` (image-only PDF) with `.afterburn/2016-headings.tsv` |
+| `2016/` | `2016-weighted-results.pdf` | `build-scanned.py` with `.afterburn/2016-wr-headings.tsv` |
 | `2015/`, `2014/`, `2013/` | `<year>-weighted-results.pdf` | `build-deck.py` |
 | `2015-expanded-report/` | `2015-expanded-report.pdf` | `build-deck.py` |
 
@@ -309,7 +309,8 @@ rendered from the PDF as displayed.
   12 text-only slides (2013-2016 pages 3-5, 7, 8, 103, 104; 2016 Weighted
   Results pages 3-5, 39, 40): OCR'd, proofread against the slides, and kept in
   `.afterburn/2016-text-slides.py` as HTML that replaces those slide images.
-  Their dead goo.gl link keeps its printed text but points to `../2016/`.
+  Their dead goo.gl link keeps its printed text but points to
+  `../2016-population-analysis/`.
   The builder's OCR log goes to `.afterburn/<dir>.ocr-log.tsv`, never a
   `*-headings.tsv` name (that once overwrote the corrections file).
 
