@@ -260,6 +260,7 @@ rendered from the PDF as displayed.
 |---|---|---|
 | `2017-summary-report/` | `2017-summary-report.pdf` | `build-pdf-report.py` (2017 template; slide 3's survey table is an override) |
 | `2016/` | `2016-population-analysis.pdf` | `build-scanned.py` (image-only PDF) with `.afterburn/2016-headings.tsv` |
+| `2016-weighted-results/` | `2016-weighted-results.pdf` | `build-scanned.py` with `.afterburn/2016-wr-headings.tsv` |
 | `2015/`, `2014/`, `2013/` | `<year>-weighted-results.pdf` | `build-deck.py` |
 | `2015-expanded-report/` | `2015-expanded-report.pdf` | `build-deck.py` |
 
@@ -317,7 +318,8 @@ sandboxes can't reach these hosts).
 | `2014-weighted-results.pdf` | history.burningman.org `Census-2014-Afterburn.pdf` (cover: "Weighted Results Report") |
 | `2015-weighted-results.pdf` | history.burningman.org `BRC-Census-2015.pdf` (cover: "AfterBurn Report") |
 | `2015-expanded-report.pdf` | history.burningman.org `2015-Expanded-Census-Report.pdf` |
-| `2016-population-analysis.pdf` | Google Drive `0BxJfvV_7__jqRTlpVHRWbGZIMkE` (cover: "2013-2016 Population Analysis"; image-only, no text layer). The old page links both 2016 reports to this file, so the 2016 AfterBurn Report is missing. |
+| `2016-population-analysis.pdf` | Google Drive `0BxJfvV_7__jqRTlpVHRWbGZIMkE` (cover: "2013-2016 Population Analysis"; image-only, no text layer). The old page links both 2016 reports to this file. |
+| `2016-weighted-results.pdf` | Supplied separately (cover: "2016 AfterBurn Report"; 40 slides, image-only) |
 | `2017-summary-report.pdf` | S3 `brccensus.public.reports/2017 Docs/05.22.18 2013-2017 Summary Report.pdf` |
 | `2017-population-analysis.pdf` | S3 `brccensus.public.reports/2017 Docs/05.22.18 2013-2017 Population Analysis.pdf` |
 | `2018-population-analysis.pdf` | history.burningman.org `2019-BRC-Census-Population-Analysis-2.pdf` (filename says 2019, but the cover says "2013-2018 Population Analysis") |
