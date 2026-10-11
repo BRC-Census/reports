@@ -156,7 +156,11 @@ Built by `.afterburn/build-2001.py` (titles, grouping, hand-set crops); images
 fetched by `.afterburn/fetch-2001.sh`. "Political Affiliation" shares rows with
 its legend, so its title is masked rather than cropped. Each GIF has a 1px
 dark frame, so every chart uses `.chart.edged` (`afterburn.css`), which also
-clips `--e: 2` px from the left, right and bottom.
+clips `--e: 2` px from the left, right and bottom. High-density screens get
+`images/<name>@2x.png` via `srcset`: 200% Lanczos + unsharp mask (radius 1.2,
+80%, threshold 2), made by `.afterburn/upscale-2001.py`. The original GIFs are
+untouched and still served at 1x; crops are in original-pixel units, so they
+apply to both.
 
 How 2006-2011 were built, for adding another year: download the
 page HTML and images on the Mac (this sandbox can't reach
