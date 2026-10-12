@@ -58,6 +58,7 @@ h4 { font-size: 1.25rem; font-weight: 400; opacity: 0.9; margin: 1.5rem 0 0.5rem
 .sidebar a:hover, .sidebar a:focus-visible { color: var(--nav-hover); }
 .sidebar ul ul { padding-left: 0.5em; }
 .sidebar ul ul li { font-size: 0.875rem; }
+.sidebar .back { margin-top: 1em; }   /* a blank line above Back, as patch.js adds to the prebuilt reports */
 .sidebar .back svg { width: 1em; height: 1em; vertical-align: -0.125em; }
 
 @media (max-width: 991px) {
@@ -152,4 +153,3 @@ body.files { grid-template-columns: max-content; }
 .files .reports { width: max-content; max-width: 100%; }   /* sizes stay beside the names at any width or zoom */
 .files .reports li { display: flex; justify-content: space-between; gap: 1.5em; }   /* sizes right-aligned */
 .size { color: var(--muted); font-variant-numeric: tabular-nums; }
-.files .back { margin-top: 1.5rem; }   /* a blank line above Back */
