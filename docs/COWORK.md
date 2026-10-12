@@ -32,6 +32,9 @@ Notes for Claude and Woodie. Cross-project habits live in
   and the reports rebuilt from PDFs (`<body class="popanalysis">`). The
   Quarto, bookdown and 2018/2019 reports keep their own CSS (2022's own
   `2022/style.css` is a different file).
+- Every image on the pages built here (2001-2017) is a link to its full image
+  file, so a click shows it larger: the uncropped original on the After Burn
+  pages (2001: its @2x upscale). The builders all write these links.
 - `public/patch.js` is the one script added to the prebuilt reports (the Back
   link; see "Adding a new year").
 
