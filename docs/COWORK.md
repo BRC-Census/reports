@@ -33,8 +33,14 @@ Notes for Claude and Woodie. Cross-project habits live in
   Quarto, bookdown and 2018/2019 reports keep their own CSS (2022's own
   `2022/style.css` is a different file).
 - Every image on the pages built here (2001-2017) is a link to its full image
-  file, so a click shows it larger: the uncropped original on the After Burn
-  pages (2001: its @2x upscale). The builders all write these links.
+  file, so a click shows it larger: on the After Burn pages, the uncropped
+  chart's @2x upscale. The builders all write these links.
+- After Burn charts (2001, 2005-2011) also have a sharpened 2x copy served to
+  high-density screens via `srcset`, made by `.afterburn/upscale.py <year>...`
+  (2001: `upscale-2001.py`, same settings): 200% Lanczos + unsharp mask
+  (radius 1.2, 80%, threshold 2); GIFs become `<name>@2x.png` (256 colors),
+  JPEGs `<name>@2x.jpg` (quality 90). Originals are untouched; layout and
+  crops don't change, since `srcset` 2x keeps the image's size.
 - `public/patch.js` is the one script added to the prebuilt reports (the Back
   link; see "Adding a new year").
 
