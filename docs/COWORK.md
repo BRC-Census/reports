@@ -213,6 +213,11 @@ left out. High-density screens get
 untouched and still served at 1x; crops are in original-pixel units, so they
 apply to both.
 
+2009's chart GIFs have no title inside, only a 1px grey frame (2px along the
+bottom of `age1.gif`) around white space, so each is `.chart.edged` with
+`--e: 3; --crop: 3; --h: <height - 6>`: 3px trimmed on every side, shown at
+its own width less 6px. Set by hand in `public/2009/index.html`.
+
 How 2006-2011 were built, for adding another year: download the
 page HTML and images on the Mac (this sandbox can't reach
 history.burningman.org; quote anything with `?` for zsh) into the gitignored
