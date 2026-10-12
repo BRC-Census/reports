@@ -146,3 +146,7 @@ body.home {
 @media (hover: none) {
   .reports .pdf { opacity: 1; }
 }
+
+/* ---- PDF archive (public/pdf/index.html, written by bin/pdf-index) ---- */
+body.files { grid-template-columns: max-content; }
+.size { color: var(--muted); margin-left: 0.25em; }

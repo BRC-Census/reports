@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+"""Write public/pdf/index.html: every PDF in public/pdf/, newest first (file
+names in reverse order), with its size. Re-run after adding or replacing a PDF:
+
+    bin/pdf-index
+"""
+import html, os
+
+root = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'public', 'pdf')
+
+def size(n):
+    mb = n / 1048576            # as ls -lh counts it
+    if mb < 1:
+        return f'{round(n / 1024)}KB'
+    return f'{mb:.1f}MB' if mb < 10 else f'{round(mb)}MB'
+
+pdfs = sorted((f for f in os.listdir(root) if f.lower().endswith('.pdf')), reverse=True)
+items = '\n'.join(
+    f'    <li><a href="{html.escape(f)}">{html.escape(f)}</a> '
+    f'<span class="size">{size(os.path.getsize(os.path.join(root, f)))}</span></li>'
+    for f in pdfs)
+
+BACK = ('<svg viewBox="0 0 16 16" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" '
+        'd="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 '
+        '1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z"/></svg>')
+
+page = f'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>/* subdir-base */(function(p){{if(!/\\/$|\\.[A-Za-z0-9]+$/.test(p))document.write('<base href="'+p+'/">');}})(location.pathname);</script>
+<link rel="icon" href="../favicon.ico"><link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Rock City Census PDF Archive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="../style.css" rel="stylesheet">
+</head>
+<body class="files">
+
+<nav class="sidebar" aria-label="PDF Archive">
+  <h1 class="sidebar-title">Black Rock City Census<br>PDF Archive</h1>
+  <ul class="reports">
+{items}
+  </ul>
+  <ul>
+    <li class="back"><a href="../">{BACK} Back</a></li>
+  </ul>
+</nav>
+
+</body>
+</html>
+'''
+with open(os.path.join(root, 'index.html'), 'w') as f:
+    f.write(page)
+print(f'public/pdf/index.html: {len(pdfs)} PDFs')

@@ -41,6 +41,9 @@ Notes for Claude and Woodie. Cross-project habits live in
   (radius 1.2, 80%, threshold 2); GIFs become `<name>@2x.png` (256 colors),
   JPEGs `<name>@2x.jpg` (quality 90). Originals are untouched; layout and
   crops don't change, since `srcset` 2x keeps the image's size.
+- `public/pdf/index.html` lists every PDF in `public/pdf/` with its size,
+  newest first, in the menu style. `bin/pdf-index` writes it; re-run it after
+  adding or replacing a PDF.
 - `public/patch.js` is the one script added to the prebuilt reports (the Back
   link; see "Adding a new year").
 
@@ -395,7 +398,10 @@ folder, named:
   "AfterBurn Report"); everything in HTML, including any future web version of
   a 2013-2015 deck, calls them "<year> Weighted Results".
 - Lowercase and hyphens only. The original filenames are recorded below, not
-  reused. Prebuilt years keep their generator's names (2022's `_main.pdf`).
+  reused. 2022's bookdown `_main.pdf` was moved here as
+  `2022-population-analysis.pdf`; its pages' download button (the `"download"`
+  list in each page's GitBook config) points to `../pdf/` (its `_main.epub`
+  stays in `2022/`).
 
 On the landing page, a PDF-only report is one link, "<years> <Title>, PDF",
 using the report's own span of years where it covers several (e.g.
@@ -405,7 +411,7 @@ using the report's own span of years where it covers several (e.g.
 is hovered or keyboard-focused (`:has(:focus-visible)`, not `:focus-within`,
 which kept it showing after a click; `opacity: 0`, not `visibility: hidden`,
 so Tab can reach it) (always shown on touch screens): 2012, 2017, 2018, 2019
-and 2022, whose PDF is its own bookdown `_main.pdf`. 2012's PDF is the source
+and 2022. 2012's PDF is the source
 deck for the 2012 page, saved as `public/pdf/2012-weighted-results.pdf`.
 
 `.afterburn/fetch-pdfs.sh` downloads them straight into `public/pdf/` under
