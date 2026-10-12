@@ -19,9 +19,21 @@ Notes for Claude and Woodie. Cross-project habits live in
   The volunteer-team link points to https://volunteers.census.burningman.org/
   and Burner Express to https://burnerexpress.burningman.org/ (the old page's
   links were dead).
-  The CSS is small and standalone, matching the reports' sidebar: Source Sans
-  Pro, text `#343a40`, hover `#2761e3`, title 22.1px, links 15.725px, 46px left
-  / 35px top margin (the Quarto sidebar's minimum offset).
+  The report list is a `.sidebar` like the report menus, so it looks the same.
+- `public/style.css` copies the look of the 2025 Quarto report without its
+  Bootstrap layers: 17px root, Source Sans Pro, text `#343a40`, links
+  `#2761e3`, headings weight 600 at Bootstrap's responsive sizes (h1 2rem, h2
+  1.65rem, h3 1.45rem, h4 1.25rem regular, fixed from 1200px wide), menu links
+  `#595959` with Quarto's sidebar spacing. If the look changes, re-measure
+  2025's computed styles and update these values, not per-page overrides.
+  It is the one stylesheet for every page built here: the
+  landing page (`<body class="home">`, rules scoped to `.home`), the pre-2013
+  After Burn pages (unscoped base rules: sidebar, headings, `.chart` crops),
+  and the reports rebuilt from PDFs (`<body class="popanalysis">`). The
+  Quarto, bookdown and 2018/2019 reports keep their own CSS (2022's own
+  `2022/style.css` is a different file).
+- `public/patch.js` is the one script added to the prebuilt reports (the Back
+  link; see "Adding a new year").
 
 ## Deploy
 
@@ -31,6 +43,17 @@ Actions" (branch mode can only serve `/` or `/docs`). Actions deploys the folder
 as-is, so no Jekyll processing; folders starting with `_` (2022's
 `_main_files`) are served normally. No custom domain; the CNAME was removed
 deliberately.
+
+## Favicon
+
+The site is a project site under `/reports/`, so a browser's automatic request
+for `/favicon.ico` goes to the domain root, which isn't ours. Every page must
+name its icon, so each one carries
+`<link rel="icon" href="../favicon.ico"><link rel="apple-touch-icon" href="../apple-touch-icon.png">`
+(no `../` on the landing page). `public/favicon.ico` (16, 32 and 48px) is copied from
+`.afterburn/favicon.ico`; `public/apple-touch-icon.png` is 180px, from
+`2019/images/Logo.PNG`. 2018 and 2019 keep their own icon tags. `bin/add-year`
+and the builders in `.afterburn/` add the tag to new pages.
 
 ## Adding a new year
 
@@ -65,9 +88,9 @@ What the script adds, if it ever has to be done by hand:
   against `.../reports/`; this writes `<base href=".../2026/">` first. A fixed
   `<base>` can't work, since it would break either the slash or no-slash URL.
   Copy the line verbatim from `public/2025/index.html` (`subdir-base`).
-- **Back link**, every `.html` page: `<script src="../home-link.js"></script>`
+- **Back link**, every `.html` page: `<script src="../patch.js"></script>`
   near the top of `<head>`, after the base fix in `index.html` so it resolves
-  correctly. `public/home-link.js` appends a "Back" item (circled left-arrow
+  correctly. `public/patch.js` appends a "Back" item (circled left-arrow
   icon, linking to `../`) to the end of the sidebar: Quarto's
   `#quarto-sidebar` menu, or GitBook's `ul.summary` for bookdown builds. Its
   icons come from fonts the reports already load (Bootstrap Icons in Quarto,
@@ -84,7 +107,7 @@ predates these changes and is harmless.
 2005-2011 census results were AfterBurn pages on history.burningman.org,
 mostly a column of chart images with each question baked into the image.
 They're rebuilt as hand-written pages in `public/2001/` and `public/2005/`-`public/2011/`, all
-sharing `public/afterburn.css`. Goals, in priority order:
+sharing `public/style.css`. Goals, in priority order:
 
 1. **Maintain the original report content.** Same charts in the same order,
    titles verbatim including their typos ("llived", "martial status" in 2007;
@@ -156,7 +179,7 @@ sharing `public/afterburn.css`. Goals, in priority order:
   the original wording.
 - Each page carries the `subdir-base` script and its own inline "Back" link
   (inline SVG arrow, since these pages have no icon font), so it doesn't use
-  `home-link.js` or `bin/add-year`.
+  `patch.js` or `bin/add-year`.
 
 2001 and 2010 are the exceptions to "never reorder charts" (2010: see
 Structure above). Its old page was 43
@@ -167,7 +190,7 @@ Afterward). Titles are typed from the images verbatim ("plya" x4, "loosing").
 Built by `.afterburn/build-2001.py` (titles, grouping, hand-set crops); images
 fetched by `.afterburn/fetch-2001.sh`. "Political Affiliation" shares rows with
 its legend, so its title is masked rather than cropped. Each GIF has a 1px
-dark frame, so every chart uses `.chart.edged` (`afterburn.css`), which also
+dark frame, so every chart uses `.chart.edged` (`style.css`), which also
 clips `--e: 3` px from the left, right and bottom and is shown up to
 385px wide (`--max`) like the other years' charts, (the 2x copies' sharpening
 rings about 2.5px in). Where a group's only chart title equals its label
@@ -195,7 +218,7 @@ on the new pages).
 `bm12_weighted_census_data-v6.pdf` (history.burningman.org uploads; a copy is
 in the gitignored `.afterburn/`). Same rules as the After Burn pages: wording
 verbatim (including the divider's "Sociodeomographic"), original order, the
-Welcome section, `afterburn.css`. Title "Black Rock City Census 2012 Weighted
+Welcome section, `style.css`. Title "Black Rock City Census 2012 Weighted
 Results", `<h1>` "2012 Weighted Results" from the deck's cover.
 
 The PDF has real text, so text slides became HTML word for word (no OCR), the
@@ -219,7 +242,7 @@ Quarto or bookdown, and no source repo survives (murrs's public repos start at
   filename; renamed to plain `feather.*` and the CSS `url()`s to match.
 - `bin/add-year 2018 "2013–2018 Population Analysis"`, then its landing-page
   line moved below the 2013-2022 entry (the script always inserts at the top).
-- `home-link.js` gained a third case for this menu (`#ml-menu
+- `patch.js` gained a third case for this menu (`#ml-menu
   ul[data-menu="main"]`), with an inline SVG arrow since the page has no icon
   font with one.
 
@@ -242,7 +265,7 @@ list is `.afterburn/ia-2019.txt`.
 
 Main `<h1>` changed to "2013-2019 Population Analysis" (as 2018). Otherwise
 unchanged apart from `bin/add-year 2019 "2013–2019 Population Analysis"`
-(base fix, Back link via `home-link.js`'s menu case) and the landing line,
+(base fix, Back link via `patch.js`'s menu case) and the landing line,
 which carries the PDF too. One fix: leftover "2013-2018" metadata (the
 `<title>` of `principles.html` and a stray one in `eventinfo.html`, plus four
 pages' meta descriptions) now says "2013-2019" like the rest; a sentence in
@@ -255,7 +278,7 @@ and is unused.
 
 `public/2017/` is generated from `public/pdf/2017-population-analysis.pdf`
 (152 landscape slides) by `.afterburn/build-pdf-report.py`, styled by
-`afterburn.css` + `popanalysis.css`:
+`style.css` (`.popanalysis` rules):
 
     python3 .afterburn/build-pdf-report.py public/pdf/2017-population-analysis.pdf \
         public/2017 "Black Rock City Census 2013-2017 Population Analysis" \
@@ -286,8 +309,8 @@ coordinates:
 ## 2013-2017 Summary Report, 2013-2016 Population Analysis, 2013-2015 decks
 
 Every report on the old Census Archive now has a web version beside its PDF.
-All are generated into `public/<dir>/` and styled by `afterburn.css` +
-`popanalysis.css`; each script keeps text verbatim and shows charts as images
+All are generated into `public/<dir>/` and styled by `style.css`
+(`.popanalysis` rules); each script keeps text verbatim and shows charts as images
 rendered from the PDF as displayed.
 
 | Web dir | PDF | Built by |
@@ -319,6 +342,31 @@ rendered from the PDF as displayed.
   `../2016-population-analysis/`.
   The builder's OCR log goes to `.afterburn/<dir>.ocr-log.tsv`, never a
   `*-headings.tsv` name (that once overwrote the corrections file).
+
+## Hand-edited pages in the PDF-built reports
+
+Where a slide mixes text and a chart, the text can be pulled out of the slide
+image by hand and the image cropped to just the chart. So a rebuild keeps
+those edits, each lives in `.afterburn/hand-pages/<web dir>/`:
+
+- `pNNN.html` is everything shown for PDF page NNN (between the page's
+  `<!-- page NNN -->` marker and the next heading); the heading itself still
+  comes from the builder.
+- `images/pNNN-chart.png` is the cropped chart. No builder writes a
+  `-chart.png` name, so it is never overwritten.
+- `build-pdf-report.py` and `build-scanned.py` call
+  `.afterburn/handpages.py` after building, which swaps each hand page in,
+  copies its images into `public/<dir>/images/`, and deletes the generated
+  images it replaced. (`build-deck.py` has no per-page markers, so it has no
+  hand pages yet.)
+- Give each cropped chart `width`/`height` (the file's pixel size),
+  `loading="lazy" decoding="async"`, and alt text that states the chart's
+  title and values. `.popanalysis` images never grow past their own width.
+
+Current hand pages: `2017/` page 5 and `2016-population-analysis/` page 6
+("Weighted Results: an Example"). Checked: rebuilding 2017 and the 2017
+Summary Report reproduces the published files exactly; rebuilding 2013-2016
+differs only in OCR alt text when the Tesseract version differs.
 
 ## 2013-2019 PDF reports
 

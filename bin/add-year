@@ -11,15 +11,19 @@ BASE=$(cat <<'EOF'
 <script>/* subdir-base */(function(p){if(!/\/$|\.[A-Za-z0-9]+$/.test(p))document.write('<base href="'+p+'/">');})(location.pathname);</script>
 EOF
 )
-HOME_LINK='<script src="../home-link.js"></script>'
-export BASE HOME_LINK
+PATCH='<script src="../patch.js"></script>'
+ICON='<link rel="icon" href="../favicon.ico"><link rel="apple-touch-icon" href="../apple-touch-icon.png">'
+export BASE PATCH ICON
 
 perl -0pi -e 's{<head>(\r?\n)}{<head>$1$ENV{BASE}$1} unless /subdir-base/' "$dir/index.html"
 for f in "$dir"/*.html; do
+  grep -q 'rel="[^"]*icon' "$f" || perl -0pi -e 's{(patch\.js"></script>\r?\n|<head>\r?\n)}{$1$ENV{ICON}\n}' "$f"
+done
+for f in "$dir"/*.html; do
   perl -0pi -e '
-    next if /home-link\.js/;
-    s{(subdir-base.*?</script>)(\r?\n)}{$1$2$ENV{HOME_LINK}$2}s
-      or s{<head>(\r?\n)}{<head>$1$ENV{HOME_LINK}$1};
+    next if /patch\.js/;
+    s{(subdir-base.*?</script>)(\r?\n)}{$1$2$ENV{PATCH}$2}s
+      or s{<head>(\r?\n)}{<head>$1$ENV{PATCH}$1};
   ' "$f"
 done
 
@@ -38,6 +42,6 @@ missing=$(
 [ -z "$missing" ] || echo "$missing" >&2
 
 echo "subdir-base:  $(grep -l subdir-base "$dir/index.html" | wc -l | tr -d ' ')/1 index.html"
-echo "home-link.js: $(grep -l home-link.js "$dir"/*.html | wc -l | tr -d ' ')/$(ls "$dir"/*.html | wc -l | tr -d ' ') pages"
+echo "patch.js:     $(grep -l patch.js "$dir"/*.html | wc -l | tr -d ' ')/$(ls "$dir"/*.html | wc -l | tr -d ' ') pages"
 echo "landing page: $(grep -c "href=\"$year/\"" public/index.html) link"
 [ -z "$missing" ] || { echo "error: fix the missing files above (copy the whole build)" >&2; exit 1; }
