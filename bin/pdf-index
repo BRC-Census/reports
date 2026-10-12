@@ -9,10 +9,17 @@ import html, os
 root = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'public', 'pdf')
 
 def size(n):
-    mb = n / 1048576            # as ls -lh counts it
-    if mb < 1:
-        return f'{round(n / 1024)}KB'
-    return f'{mb:.1f}MB' if mb < 10 else f'{round(mb)}MB'
+    """Finder-style, as in github.com/woodie/humane: 1000-based units, 0
+    decimals for KB, 1 for MB, 2 for GB and up, trailing zeros dropped."""
+    if n < 1000:
+        return '1 byte' if n == 1 else f'{n} bytes'
+    exp, value = 0, float(n)
+    while value >= 1000 and exp < 6:
+        value /= 1000; exp += 1
+    s = f'{value:.{ {1: 0, 2: 1}.get(exp, 2) }f}'
+    if '.' in s:
+        s = s.rstrip('0').rstrip('.')
+    return f'{s} {"KB MB GB TB PB EB".split()[exp - 1]}'
 
 pdfs = sorted((f for f in os.listdir(root) if f.lower().endswith('.pdf')), reverse=True)
 items = '\n'.join(

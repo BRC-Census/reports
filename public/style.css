@@ -149,4 +149,6 @@ body.home {
 
 /* ---- PDF archive (public/pdf/index.html, written by bin/pdf-index) ---- */
 body.files { grid-template-columns: max-content; }
-.size { color: var(--muted); margin-left: 0.25em; }
+.files .reports li { display: flex; justify-content: space-between; gap: 1.5em; }   /* sizes right-aligned */
+.size { color: var(--muted); font-variant-numeric: tabular-nums; }
+.files .back { margin-top: 1.5rem; }   /* a blank line above Back */
