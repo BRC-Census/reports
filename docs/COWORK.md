@@ -13,14 +13,20 @@ Notes for Claude and Woodie. Cross-project habits live in
   the current Census overview and methodology on the right under
   "Black Rock City Census" (see "Editorial sources and conventions" below),
   and the list of
-  reports on the left under "Census Archive" (column sized to its longest
-  line, hidden ", PDF" included, so nothing wraps). The
+  reports on the right under "Census Archive" (column sized to its longest
+  line, hidden ", PDF" included, so nothing wraps). The landing page alone is
+  styled after burningman.org (October 2026, at Chipper's request, to support
+  asking for a burningman.org subdomain): black top bar, peach title band,
+  Bespoke Slab headings (burningman.org's own font, from Fontshare, with its
+  Rockwell/Roboto Slab fallbacks), Roboto body, links `#534be7`, and the list
+  as a ruled side menu like burningman.org's. Its rules are scoped to `.home`.
+  No Burning Man Project logo. The
   intro comes first in the HTML, so on phones it shows first and the list
   follows its closing "...check out the Census results through the years:".
   The volunteer-team link points to https://volunteers.census.burningman.org/
   and the methodology link to its /training/welcome page.
-  The report list is a `.sidebar` like the report menus, so it looks the same.
-- `public/style.css` copies the look of the 2025 Quarto report without its
+  The report list is still a `.sidebar` (sticky, scrolls), restyled under `.home`.
+- `public/style.css` (outside the `.home` rules) copies the look of the 2025 Quarto report without its
   Bootstrap layers: 17px root, Source Sans Pro, text `#343a40`, links
   `#2761e3`, headings weight 600 at Bootstrap's responsive sizes (h1 2rem, h2
   1.65rem, h3 1.45rem, h4 1.25rem regular, fixed from 1200px wide), menu links
