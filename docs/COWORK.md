@@ -10,15 +10,15 @@ Notes for Claude and Woodie. Cross-project habits live in
   bookdown/GitBook, 2023-2025 are Quarto builds. Don't hand-edit their
   generated assets beyond what `bin/add-year` adds (see "Adding a new year").
 - `public/index.html` + `public/style.css` are the hand-written landing page:
-  the old Census Archive page's intro (three paragraphs and its four links,
-  verbatim) on the right under "Black Rock City Census", and the list of
+  the current Census overview and methodology on the right under
+  "Black Rock City Census" (see "Editorial sources and conventions" below),
+  and the list of
   reports on the left under "Census Archive" (column sized to its longest
   line, hidden ", PDF" included, so nothing wraps). The
   intro comes first in the HTML, so on phones it shows first and the list
   follows its closing "...check out the Census results through the years:".
   The volunteer-team link points to https://volunteers.census.burningman.org/
-  and Burner Express to https://burnerexpress.burningman.org/ (the old page's
-  links were dead).
+  and the methodology link to its /training/welcome page.
   The report list is a `.sidebar` like the report menus, so it looks the same.
 - `public/style.css` copies the look of the 2025 Quarto report without its
   Bootstrap layers: 17px root, Source Sans Pro, text `#343a40`, links
@@ -46,6 +46,28 @@ Notes for Claude and Woodie. Cross-project habits live in
   adding or replacing a PDF.
 - `public/patch.js` is the one script added to the prebuilt reports (the Back
   link; see "Adding a new year").
+
+## Editorial sources and conventions
+
+- Treat "data" as plural in new and edited site copy: "data are",
+  "data help", and "these data". Preserve original wording in archived
+  reports, as described below.
+- The landing-page introduction was updated on October 29, 2026, at
+  Chipper's request. It replaces copy carried over from the old Census
+  Archive, much of which also appeared in an October 2014 Journal post.
+  Do not restore that older introduction as the current Census description.
+- Use the current [Census Welcome and Overview](https://volunteers.census.burningman.org/training/welcome)
+  for the project description, data uses, and two-phase data collection
+  and weighting explanation. Use the
+  [volunteer site](https://volunteers.census.burningman.org/) for joining
+  the team.
+- The [2025 Population Report](https://blackrockcitycensus.org/) explains
+  the scope of the estimates (BRC participants, rather than the broader
+  Burning Man community) and limits on comparisons with pre-2013 reports.
+  Changes in questions and methods also affect comparability across years.
+- Refer to Burning Man Project by its current name. Avoid relative dates
+  such as "in the last few years" and claims that changes in travel behavior
+  demonstrate a program's impact without supporting analysis.
 
 ## Deploy
 
@@ -435,3 +457,4 @@ sandboxes can't reach these hosts).
 | `2017-population-analysis.pdf` | S3 `brccensus.public.reports/2017 Docs/05.22.18 2013-2017 Population Analysis.pdf` |
 | `2018-population-analysis.pdf` | history.burningman.org `2019-BRC-Census-Population-Analysis-2.pdf` (filename says 2019, but the cover says "2013-2018 Population Analysis") |
 | `2019-population-analysis.pdf` | history.burningman.org `BRC-Census-Population-Analysis-2013-2019.pdf` |
+
