@@ -120,18 +120,63 @@ table.data thead th { background: #e9ecef; }
 .popanalysis main li.sub { margin-left: 1.5rem; list-style: circle; }
 
 /* ---- Landing page: <body class="home"> ---- */
-/* Two panes like the report pages: archive list left, intro right. The
-   intro comes first in the HTML so phones show it, then the list. The list
-   is a .sidebar too, so it shares the report menus' look. */
+/* Styled after burningman.org's own pages (colors measured from its Census
+   page, fonts from its theme: Bespoke Slab headings with its own Rockwell /
+   Roboto Slab fallbacks, Roboto body): black top bar, peach title band, intro
+   left and the archive list right with a rule, like burningman.org's section
+   menu. No Burning Man Project logo. Report pages keep the look above. The
+   intro comes first in the HTML so phones show it, then the list. */
 body.home {
-  grid-template-columns: max-content minmax(0, 720px);   /* list sized to its longest line */
-  grid-template-areas: "archive intro";
+  --bm-ink: #292929;
+  --bm-link: #534be7;
+  --bm-slab: "Bespoke Slab", Rockwell, "Rockwell Nova", "Roboto Slab", serif;
+  display: block;
+  padding: 0;
+  color: var(--bm-ink);
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+.home a { color: var(--bm-link); }
+.home a:hover { color: var(--bm-ink); }
+
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  background: #0f0f0f; color: #fff;
+  padding: 1.1rem 46px;
+}
+.topbar a {
+  color: #fff; text-decoration: none;
+  font-family: var(--bm-slab); font-size: 1.35rem; letter-spacing: 0.04em; text-transform: uppercase;
+}
+.topbar span { font-size: 0.95rem; opacity: 0.85; }
+
+.band { background: #ffa477; padding: 3.5rem 46px; }
+.band h1 {
+  font-family: var(--bm-slab); font-weight: 500;
+  font-size: clamp(2rem, 1.4rem + 2.5vw, 3.25rem); margin: 0; color: #1a1a1a;
+}
+
+.home .page {
+  display: grid;
+  grid-template-columns: minmax(0, 720px) max-content;   /* list sized to its longest line */
+  grid-template-areas: "intro archive";
+  column-gap: 64px;
+  padding: 2.5rem 24px 64px 46px;
 }
 .home main { grid-area: intro; }
-.home .archive { grid-area: archive; }
+.home .archive {
+  grid-area: archive; top: 1.5rem;
+  border-left: 1px solid var(--bm-link); padding-left: 1.25rem;
+}
+.home .sidebar-title { font-family: var(--bm-slab); color: var(--bm-link); font-size: 1.25rem; }
+.home .sidebar a { color: var(--bm-ink); font-weight: 700; }
+.home .sidebar a:hover, .home .sidebar a:focus-visible { color: var(--bm-link); }
+.home .reports .pdf a { font-weight: 400; color: var(--bm-link); }
 .reports li { white-space: nowrap; }   /* the hidden ", PDF" must never push a line onto two */
 
 @media (max-width: 991px) {
+  .topbar, .band { padding-left: 1rem; padding-right: 1rem; }
+  .band { padding-top: 2rem; padding-bottom: 2rem; }
+  .home .page { display: block; padding-left: 1rem; }
   .home .archive { margin: 2rem 0 0; }
 }
 
