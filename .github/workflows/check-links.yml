@@ -1,0 +1,23 @@
+name: Check links
+
+on:
+  pull_request:
+    paths: [public/**, .github/workflows/check-links.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check local links and assets in public/
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --offline
+            --no-progress
+            --root-dir "${{ github.workspace }}/public"
+            "public/**/*.html"
+          fail: true
