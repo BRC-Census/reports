@@ -119,65 +119,126 @@ table.data thead th { background: #e9ecef; }
 .table-scroll { overflow-x: auto; }
 .popanalysis main li.sub { margin-left: 1.5rem; list-style: circle; }
 
-/* ---- Landing page: <body class="home"> ---- */
-/* Styled after burningman.org's own pages (colors measured from its Census
-   page, fonts from its theme: Bespoke Slab headings with its own Rockwell /
-   Roboto Slab fallbacks, Roboto body): black top bar, peach title band, intro
-   left and the archive list right with a rule, like burningman.org's section
-   menu. No Burning Man Project logo. Report pages keep the look above. The
-   intro comes first in the HTML so phones show it, then the list. */
+/* ---- Landing page: <html class="home-root"><body class="home"> ---- */
+/* Styled after history.burningman.org's Census Archive page (its
+   burning-man-phoenix theme, values read from its app.css and
+   universal-navigation.css, November 2026): dark top bar, banner with the
+   section title in Stint Ultra Expanded, Rockwell page title, Open Sans body,
+   a 1000px column split 62.5% / 29% with the archive list on the right as its
+   cream "section menu" in Barlow Semi Condensed, and a charcoal footer in
+   Lato. No Burning Man Project logo or photo: the top bar has our name and
+   the banner is a plain warm gradient. RockwellStd is a licensed font the
+   history site hosts itself, so we fall back to Rockwell where installed,
+   then Roboto Slab. Report pages keep the look above. The intro comes first
+   in the HTML so phones show it, then the list. Breakpoints are the theme's
+   (Foundation's): 40.063em and 64.063em. */
+html.home-root { font-size: 16px; }
 body.home {
-  --bm-ink: #292929;
-  --bm-link: #534be7;
-  --bm-slab: "Bespoke Slab", Rockwell, "Rockwell Nova", "Roboto Slab", serif;
+  --h-ink: #333;
+  --h-link: #1a64a8;
+  --h-link-hover: #0078a0;
+  --h-title: #2c5573;
+  --h-menu: #996600;
+  --h-menu-top: #722426;
+  --h-rockwell: "RockwellStd", Rockwell, "Rockwell Nova", "Roboto Slab", serif;
+  --h-lato: Lato, "Helvetica Neue", Arial, sans-serif;
   display: block;
   padding: 0;
-  color: var(--bm-ink);
-  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--h-ink);
+  font-family: "Open Sans", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+  line-height: 24px;
 }
-.home a { color: var(--bm-link); }
-.home a:hover { color: var(--bm-ink); }
+.home a { color: var(--h-link); text-decoration: none; }
+.home a:hover, .home a:focus { color: var(--h-link-hover); }
+.home p { line-height: 1.6; margin: 0 0 1.25rem; }
 
+/* Top bar (history site: #2f2f2f, 6px padding, logo where our name is) */
 .topbar {
   display: flex; justify-content: space-between; align-items: center;
-  background: #0f0f0f; color: #fff;
-  padding: 1.1rem 46px;
+  background: #2f2f2f; color: #fff;
+  padding: 0.6rem 20px; min-height: 52px;
 }
-.topbar a {
-  color: #fff; text-decoration: none;
-  font-family: var(--bm-slab); font-size: 1.35rem; letter-spacing: 0.04em; text-transform: uppercase;
+.topbar a, .home .topbar a:hover {
+  color: #fff;
+  font-family: var(--h-rockwell); font-size: 1.4rem; letter-spacing: 0.02em;
 }
-.topbar span { font-size: 0.95rem; opacity: 0.85; }
-
-.band { background: #ffa477; padding: 3.5rem 46px; }
-.band h1 {
-  font-family: var(--bm-slab); font-weight: 500;
-  font-size: clamp(2rem, 1.4rem + 2.5vw, 3.25rem); margin: 0; color: #1a1a1a;
+.topbar span {
+  font-family: var(--h-lato); font-size: 0.9rem; text-transform: uppercase;
+  line-height: 2.1; padding: 0 15px; border: 1px solid #c4400d; border-radius: 6px;
 }
 
+/* Banner (history site: a full-width photo, at most 500px tall, with the
+   section title centered 40% down in white with a dark shadow) */
+.band {
+  position: relative;
+  height: clamp(160px, 26vw, 500px);
+  background: linear-gradient(180deg, #8a5a3a 0%, #c98b5a 55%, #e2b88a 100%);
+}
+.band-title {
+  position: absolute; top: 40%; left: 0; right: 0;
+  transform: translateY(-50%);
+  margin: 0; padding: 0 1rem;
+  font-family: "Stint Ultra Expanded", serif;
+  font-size: clamp(1.5rem, 4.2vw, 60px); line-height: 1;
+  color: #fff; text-align: center; text-shadow: 2px 2px 2px #232323;
+}
+.home .band-title { line-height: 1; margin: 0; }
+
+/* Content column and sidebar (history site: .container.detail-page,
+   #primary 62.5% + .widget-area 29.17%, each with a 4.17% left margin) */
 .home .page {
-  display: grid;
-  grid-template-columns: minmax(0, 720px) max-content;   /* list sized to its longest line */
-  grid-template-areas: "intro archive";
-  column-gap: 64px;
-  padding: 2.5rem 24px 64px 46px;
+  max-width: 62.5rem; margin: 0 auto;
+  padding: 2.5rem 0 3rem;
+  display: flow-root;
 }
-.home main { grid-area: intro; }
+.home main { padding: 0 0.6rem 0 1rem; }
+.home h1 {
+  font-family: var(--h-rockwell); font-weight: normal;
+  font-size: 1.7rem; line-height: 1; color: var(--h-title);
+  margin: 0.2rem 0 1.25rem;
+}
+
 .home .archive {
-  grid-area: archive; top: 1.5rem;
-  border-left: 1px solid var(--bm-link); padding-left: 1.25rem;
+  margin: 1rem 0.25rem 2rem;
+  background: linear-gradient(to right, #fcfbf9 0%, rgba(252, 251, 249, 0) 100%);
+  border-top: 2px solid #ece4d8; border-bottom: 2px solid #ece4d8;
+  padding-bottom: 1rem;
 }
-.home .sidebar-title { font-family: var(--bm-slab); color: var(--bm-link); font-size: 1.25rem; }
-.home .sidebar a { color: var(--bm-ink); font-weight: 700; }
-.home .sidebar a:hover, .home .sidebar a:focus-visible { color: var(--bm-link); }
-.home .reports .pdf a { font-weight: 400; color: var(--bm-link); }
+.archive-title {
+  margin: 0; padding: 1.125rem 5px 0.75rem 0.6rem; border: 0;
+  font-family: "Barlow Semi Condensed", sans-serif; font-weight: normal;
+  font-size: 1.8rem; line-height: 1.1; color: var(--h-menu-top);
+}
+.home .reports { list-style: none; margin: 0; padding: 0 5px 0 2rem; }
+.home .reports li { padding: 0 0 2px; }
+.home .reports a {
+  display: inline-block; padding: 0 0 5px;
+  font-family: "Barlow Semi Condensed", sans-serif;
+  font-size: 1.4rem; line-height: 1.1; color: var(--h-menu);
+}
+.home .reports a:hover, .home .reports a:focus-visible { color: var(--h-menu-top); text-decoration: underline; }
+.home .reports .pdf { font-family: "Barlow Semi Condensed", sans-serif; font-size: 1.4rem; color: var(--h-menu); }
 .reports li { white-space: nowrap; }   /* the hidden ", PDF" must never push a line onto two */
 
-@media (max-width: 991px) {
-  .topbar, .band { padding-left: 1rem; padding-right: 1rem; }
-  .band { padding-top: 2rem; padding-bottom: 2rem; }
-  .home .page { display: block; padding-left: 1rem; }
-  .home .archive { margin: 2rem 0 0; }
+@media only screen and (min-width: 40.063em) {
+  .topbar { padding: 6px 20px; }
+  .home h1 { font-size: 1.9rem; }
+}
+@media only screen and (min-width: 64.063em) {
+  .home main { float: left; width: 62.5%; margin-left: 4.16667%; padding: 0 0.25rem; }
+  .home .archive { float: right; width: 29.16667%; margin: 0.5rem 0 2rem 4.16667%; }
+}
+
+/* Footer (history site: #3c3c3c, Lato uppercase links in #bdbdbd) */
+.footer {
+  clear: both;
+  display: flex; flex-wrap: wrap; gap: 0.5rem 2rem;
+  background: #3c3c3c; padding: 2rem 5% 3rem;
+}
+.home .footer a { color: #bdbdbd; font-family: var(--h-lato); text-transform: uppercase; }
+.home .footer a:hover, .home .footer a:focus { color: #fff; }
+@media only screen and (min-width: 64.063em) {
+  .footer { padding-left: 10%; padding-right: 10%; }
 }
 
 /* A report with both a web page and a PDF: the PDF link sits after the title
