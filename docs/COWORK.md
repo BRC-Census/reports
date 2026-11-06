@@ -133,6 +133,21 @@ as-is, so no Jekyll processing; folders starting with `_` (2022's
 `_main_files`) are served normally. No custom domain; the CNAME was removed
 deliberately.
 
+A Pages deployment is identified by the commit SHA, not by the workflow run
+(`pages_build_version` in the `deploy-pages` payload). So if a deploy of a
+commit fails, that SHA is spent: `deploy-pages` cancels the deployment on its
+way out ("Canceling Pages deployment..."), and every later deploy of the same
+SHA is rejected in a few seconds with "Deployment cancelled." Re-running the
+workflow, or dispatching it again, cannot fix it. **Push another commit and
+deploy that.** Nor can a failed Pages run be re-run in place: re-running the
+job runs `upload-pages-artifact` a second time, and `deploy-pages` then stops
+with "Multiple artifacts named github-pages were unexpectedly found".
+
+This came up on November 6, 2026, when the first deploy of the banner photo
+sat on an empty `Current status:` for the action's full 10-minute timeout, with
+githubstatus.com reporting everything operational. If that happens, leave it a
+while: once the SHA is spent, more attempts only add cancelled deployments.
+
 ## Favicon
 
 The site is a project site under `/reports/`, so a browser's automatic request
