@@ -162,6 +162,8 @@ body.home {
   color: #fff;
   font-family: var(--h-rockwell); font-size: 1.4rem; letter-spacing: 0.02em;
 }
+.topbar a { display: inline-flex; align-items: center; gap: 0.6rem; }
+.topbar .seal { width: 40px; height: 40px; }
 .topbar span {
   font-family: var(--h-lato); font-size: 0.9rem; text-transform: uppercase;
   line-height: 2.1; padding: 0 15px; border: 1px solid #c4400d; border-radius: 6px;
@@ -173,6 +175,16 @@ body.home {
   position: relative;
   height: clamp(160px, 26vw, 500px);
   background: linear-gradient(180deg, #8a5a3a 0%, #c98b5a 55%, #e2b88a 100%);
+}
+/* Photo slot: add public/banner.jpg (a wide photo, at least 2000px across,
+   faces cropped out or blurred) and add class="band has-photo" to the band
+   in index.html. The photo fills the banner, cropped to fit, darkened a
+   little so the white title stays readable. */
+.band.has-photo {
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
+    url(banner.jpg) center 30% / cover no-repeat,
+    #8a5a3a;
 }
 .band-title {
   position: absolute; top: 40%; left: 0; right: 0;
@@ -192,6 +204,9 @@ body.home {
   display: flow-root;
 }
 .home main { padding: 0 0.6rem 0 1rem; }
+/* The Census logo beside the intro, floated as the history site floats its
+   censuslogo.png (6px 25px 8px 0). */
+.home .logo { float: left; width: 150px; height: auto; margin: 6px 25px 8px 0; }
 .home h1 {
   font-family: var(--h-rockwell); font-weight: normal;
   font-size: 1.7rem; line-height: 1; color: var(--h-title);
@@ -220,6 +235,9 @@ body.home {
 .home .reports .pdf { font-family: "Barlow Semi Condensed", sans-serif; font-size: 1.4rem; color: var(--h-menu); }
 .reports li { white-space: nowrap; }   /* the hidden ", PDF" must never push a line onto two */
 
+@media only screen and (max-width: 40em) {
+  .home .logo { width: 110px; margin-right: 16px; }
+}
 @media only screen and (min-width: 40.063em) {
   .topbar { padding: 6px 20px; }
   .home h1 { font-size: 1.9rem; }

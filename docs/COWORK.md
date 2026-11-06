@@ -25,8 +25,13 @@ Notes for Claude and Woodie. Cross-project habits live in
   "section menu" (Barlow Semi Condensed, heading `#722426`, links `#996600`),
   and a `#3c3c3c` footer in Lato. The page sets a 16px root
   (`<html class="home-root">`), not the reports' 17px. Its rules are scoped
-  to `.home`. No Burning Man Project logo, and no history-site photo in the
-  banner (a plain warm gradient stands in). The
+  to `.home`. No Burning Man Project logo. Our own Census logo appears
+  twice: `public/census-seal-white.png` (the black-and-white seal, inverted
+  to white, 40px) in the top bar, and `public/census-logo.png` (the pink
+  logo, 150px, 110px on phones) floated beside the first paragraph.
+  The banner has a photo slot: put a wide photo at `public/banner.jpg`
+  (at least 2000px wide, faces cropped out or blurred) and change the band
+  to `<div class="band has-photo">`; until then the warm gradient shows. The
   intro comes first in the HTML, so on phones it shows first and the list
   follows its closing "...check out the Census results through the years:".
   The volunteer-team link points to https://volunteers.census.burningman.org/
