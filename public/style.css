@@ -22,7 +22,9 @@ html { font-size: 17px; }
 
 body {
   margin: 0;
-  padding: 35px 24px 64px 46px;
+  /* the top padding also leaves room for the fixed pink bar (pinkbar.css);
+     the fallback keeps the page usable if that file doesn't load */
+  padding: calc(35px + var(--pinkbar-h, 34px)) 24px 64px 46px;
   background: #fff;
   color: var(--text);
   font-family: var(--font);
@@ -50,7 +52,10 @@ h3 { font-size: min(calc(1.27rem + 0.24vw), 1.45rem); font-weight: 600; opacity:
 h4 { font-size: 1.25rem; font-weight: 400; opacity: 0.9; margin: 1.5rem 0 0.5rem; }
 
 /* ---- Left menu (report pages and the landing page's archive list) ---- */
-.sidebar { position: sticky; top: 35px; align-self: start; max-height: calc(100vh - 70px); overflow-y: auto; }
+.sidebar {
+  position: sticky; top: calc(35px + var(--pinkbar-h, 34px)); align-self: start;
+  max-height: calc(100vh - 70px - var(--pinkbar-h, 34px)); overflow-y: auto;
+}
 .sidebar-title { font-size: 1.3rem; font-weight: 400; line-height: 1.6rem; margin: 0.25rem 0 1.5rem; padding: 0; border: 0; }
 .sidebar ul { list-style: none; margin: 0; padding: 0; }
 .sidebar li { margin: 0.4rem 0 0.2em; font-size: 0.925rem; line-height: 1rem; }
@@ -58,8 +63,6 @@ h4 { font-size: 1.25rem; font-weight: 400; opacity: 0.9; margin: 1.5rem 0 0.5rem
 .sidebar a:hover, .sidebar a:focus-visible { color: var(--nav-hover); }
 .sidebar ul ul { padding-left: 0.5em; }
 .sidebar ul ul li { font-size: 0.875rem; }
-.sidebar .back { margin-top: 1em; }   /* a blank line above Back, as patch.js adds to the prebuilt reports */
-.sidebar .back svg { width: 1em; height: 1em; vertical-align: -0.125em; }
 
 @media (max-width: 991px) {
   body { display: block; padding-left: 1rem; }
@@ -143,7 +146,7 @@ body.home {
   --h-rockwell: "RockwellStd", Rockwell, "Rockwell Nova", "Roboto Slab", serif;
   --h-lato: Lato, "Helvetica Neue", Arial, sans-serif;
   display: block;
-  padding: 0;
+  padding: var(--pinkbar-h, 34px) 0 0;   /* room for the fixed pink bar */
   color: var(--h-ink);
   font-family: "Open Sans", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
   line-height: 24px;
@@ -211,6 +214,7 @@ body.home {
 .home .sidenav-tools .pill { padding: 5px 15px; line-height: 1.5; }
 .home .sidenav-tools .pill:hover, .home .sidenav-tools .pill:focus { color: #fff; background: #484747; }
 @media (prefers-reduced-motion: reduce) { .sidenav, .menu-open .sidenav { transition: none; } }
+.sidenav, .sidenav-overlay { top: var(--pinkbar-h, 34px); }   /* clear of the fixed pink bar */
 
 /* Banner (history site: a full-width photo, at most 500px tall, with the
    section title centered 40% down in white with a dark shadow) */
