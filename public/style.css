@@ -130,7 +130,7 @@ table.data thead th { background: #e9ecef; }
    a 1000px column split 62.5% / 29% with the archive list on the right as its
    cream "section menu" in Barlow Semi Condensed, and a charcoal footer in
    Lato. No Burning Man Project logo or photo: the top bar has our name and
-   the banner is a plain warm gradient. RockwellStd is a licensed font the
+   the banner is our own photo, with the gradient behind it. RockwellStd is a licensed font the
    history site hosts itself, so we fall back to Rockwell where installed,
    then Roboto Slab. Report pages keep the look above. The intro comes first
    in the HTML so phones show it, then the list. Breakpoints are the theme's
@@ -224,10 +224,10 @@ body.home {
   height: clamp(160px, 26vw, 500px);
   background: linear-gradient(180deg, #8a5a3a 0%, #c98b5a 55%, #e2b88a 100%);
 }
-/* Photo slot: add public/banner.jpg (a wide photo, at least 2000px across,
-   faces cropped out or blurred) and add class="band has-photo" to the band
-   in index.html. The photo fills the banner, cropped to fit, darkened a
-   little so the white title stays readable. */
+/* Photo: public/banner.jpg, with class="band has-photo" on the band in
+   index.html (drop the class to fall back to the gradient above). The photo
+   fills the banner, cropped to fit, darkened a little so the white title
+   stays readable. */
 .band.has-photo {
   background:
     linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
