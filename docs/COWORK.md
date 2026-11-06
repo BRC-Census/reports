@@ -35,6 +35,8 @@ Notes for Claude and Woodie. Cross-project habits live in
   `#2f2f2f`, a "Join the Census" pill below). A small inline script in
   index.html opens it; X, Escape or a click outside closes it. To change
   the menu's links, edit `<ul class="sidenav-list">` in index.html.
+  The panel and the overlay behind it start below the pink bar, so the
+  bar's Back link and the panel's X never sit on top of each other.
   The banner has a photo slot: put a wide photo at `public/banner.jpg`
   (at least 2000px wide, faces cropped out or blurred) and change the band
   to `<div class="band has-photo">`; until then the warm gradient shows. The
@@ -48,7 +50,8 @@ Notes for Claude and Woodie. Cross-project habits live in
   1.65rem, h3 1.45rem, h4 1.25rem regular, fixed from 1200px wide), menu links
   `#595959` with Quarto's sidebar spacing. If the look changes, re-measure
   2025's computed styles and update these values, not per-page overrides.
-  It is the one stylesheet for every page built here: the
+  It is one of the two stylesheets every page built here loads
+  (`pinkbar.css` is the other): the
   landing page (`<body class="home">`, rules scoped to `.home`), the pre-2013
   After Burn pages (unscoped base rules: sidebar, headings, `.chart` crops),
   and the reports rebuilt from PDFs (`<body class="popanalysis">`). The
@@ -66,8 +69,24 @@ Notes for Claude and Woodie. Cross-project habits live in
 - `public/pdf/index.html` lists every PDF in `public/pdf/` with its size,
   newest first, in the menu style. `bin/pdf-index` writes it; re-run it after
   adding or replacing a PDF.
-- `public/patch.js` is the one script added to the prebuilt reports (the Back
-  link; see "Adding a new year").
+- `public/pinkbar.css` styles the Census pink (`#EA008B`) bar across the top
+  of every page on the site, which carries the "Back" link. The bar is
+  `position: fixed` and one line tall; its height is `--pinkbar-h` (34px),
+  and every offset in the file is written in those units, so the height is
+  set in one place and `@media print` zeroes it. Each report family's own
+  furniture has to be pushed down by that height, so the file also holds a
+  short block per family, keyed off a class `patch.js` puts on `<html>`:
+  Quarto (`#quarto-header` and the sticky menu sit below the bar; Quarto
+  measures its own header and writes the result into inline styles, so these
+  rules use `!important` and `patch.js` keeps `--quarto-header-h` current),
+  bookdown/GitBook (its menu and page are both `position: absolute` from the
+  top of the viewport, so an in-flow bar would be hidden under them), and
+  2018/2019 (`.container` is `100vh`, the menu and logo block are fixed).
+  The pages built here take their offsets from `style.css` instead, since
+  that is the one stylesheet they share.
+- `public/patch.js` is the one script added to the prebuilt reports: it links
+  `pinkbar.css`, tags `<html>` with the report family, and puts the bar and
+  its Back link at the top of the page (see "Adding a new year").
 
 ## Editorial sources and conventions
 
@@ -144,13 +163,14 @@ What the script adds, if it ever has to be done by hand:
   against `.../reports/`; this writes `<base href=".../2026/">` first. A fixed
   `<base>` can't work, since it would break either the slash or no-slash URL.
   Copy the line verbatim from `public/2025/index.html` (`subdir-base`).
-- **Back link**, every `.html` page: `<script src="../patch.js"></script>`
-  near the top of `<head>`, after the base fix in `index.html` so it resolves
-  correctly. `public/patch.js` appends a "Back" item (circled left-arrow
-  icon, linking to `../`) to the end of the sidebar: Quarto's
-  `#quarto-sidebar` menu, or GitBook's `ul.summary` for bookdown builds. Its
-  icons come from fonts the reports already load (Bootstrap Icons in Quarto,
-  Font Awesome 4 in GitBook).
+- **Pink bar and Back link**, every `.html` page:
+  `<script src="../patch.js"></script>` near the top of `<head>`, after the
+  base fix in `index.html` so it resolves correctly. `public/patch.js` links
+  `../pinkbar.css` while `<head>` is still parsing, then on `DOMContentLoaded`
+  puts `<div class="pinkbar">` first in `<body>` with a "Back" link (inline
+  SVG circled left arrow, linking to `../`) at its left, and adds the
+  `pinkbar-quarto`, `pinkbar-gitbook` or `pinkbar-mlmenu` class to `<html>`
+  so `pinkbar.css` can offset that family's layout.
 - **Landing page**: a new `<li>` at the top of `ul.reports` in
   `public/index.html`, linking with a trailing slash (`2026/`).
 
@@ -233,9 +253,14 @@ sharing `public/style.css`. Goals, in priority order:
   titled charts lower down are left whole.
 - An image that is only text (2005's spending averages) becomes HTML text with
   the original wording.
-- Each page carries the `subdir-base` script and its own inline "Back" link
-  (inline SVG arrow, since these pages have no icon font), so it doesn't use
-  `patch.js` or `bin/add-year`.
+- Each page carries the `subdir-base` script and writes its own pink bar and
+  "Back" link into the HTML (inline SVG arrow, since these pages have no icon
+  font), so it doesn't use `patch.js` or `bin/add-year`. The builders in
+  `.afterburn/` still emit the old Back item at the foot of the menu: update
+  them before rebuilding a page, or the bar is lost. Copy the `<link
+  href="../pinkbar.css" rel="stylesheet">` line and the `<div class="pinkbar">`
+  that follows `<body>` from any page in `public/2005/`-`public/2017/`
+  (`bin/pdf-index`, which is in this repo, is already updated).
 
 2001 and 2010 are the exceptions to "never reorder charts" (2010: see
 Structure above). Its old page was 43
@@ -303,9 +328,8 @@ Quarto or bookdown, and no source repo survives (murrs's public repos start at
   filename; renamed to plain `feather.*` and the CSS `url()`s to match.
 - `bin/add-year 2018 "2013–2018 Population Analysis"`, then its landing-page
   line moved below the 2013-2022 entry (the script always inserts at the top).
-- `patch.js` gained a third case for this menu (`#ml-menu
-  ul[data-menu="main"]`), with an inline SVG arrow since the page has no icon
-  font with one.
+- `patch.js` gained a third case for this menu (`#ml-menu`), which is now
+  the `pinkbar-mlmenu` class it puts on `<html>`.
 
 Main `<h1>` (index.html and toc.html) changed from "BRC Census Population
 Analysis, 2013-2018" to "2013-2018 Population Analysis" to match the other
@@ -326,7 +350,7 @@ list is `.afterburn/ia-2019.txt`.
 
 Main `<h1>` changed to "2013-2019 Population Analysis" (as 2018). Otherwise
 unchanged apart from `bin/add-year 2019 "2013–2019 Population Analysis"`
-(base fix, Back link via `patch.js`'s menu case) and the landing line,
+(base fix, pink bar and Back link via `patch.js`) and the landing line,
 which carries the PDF too. One fix: leftover "2013-2018" metadata (the
 `<title>` of `principles.html` and a stray one in `eventinfo.html`, plus four
 pages' meta descriptions) now says "2013-2019" like the rest; a sentence in
