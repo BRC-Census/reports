@@ -229,9 +229,20 @@ body.home {
    fills the banner, cropped to fit, darkened a little so the white title
    stays readable. */
 .band.has-photo {
+  /* The band takes the photo's own shape instead of the gradient's fixed
+     height, so the whole of banner.jpg is always in frame: "Come to Your
+     Census" at the top of it and the baby at the bottom. Any fixed height
+     is a letterbox that cuts one or the other off, because those two sit
+     430 of the photo's 498 rows apart. Keep this ratio in step with the
+     file. Below about 550px wide the min-height wins and the sides crop
+     instead, which both of them survive. */
+  width: 100%;          /* definite, so min-height can't resolve back into width */
+  height: auto;
+  aspect-ratio: 1621 / 498;
+  min-height: 160px;
   background:
     linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)),
-    url(banner.jpg) center 30% / cover no-repeat,
+    url(banner.jpg) center / cover no-repeat,
     #8a5a3a;
 }
 .band-title {

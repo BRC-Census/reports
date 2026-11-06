@@ -44,9 +44,15 @@ Notes for Claude and Woodie. Cross-project habits live in
   index.html opens it; X, Escape or a click outside closes it. To change
   the menu's links, edit `<ul class="sidenav-list">` in index.html.
   The banner is `public/banner.jpg`, our own photo of the Census camp at
-  night: the patterned pink wall, the "Come to Your Census" sign and the
-  lounge, 1621px wide (below the 2000px a full-width banner really wants, so
-  it softens on a wide screen; replace it with the original if it turns up).
+  night: the patterned pink wall, the "Come to Your Census" sign, the lounge
+  and a Census manager holding a three-week-old baby. It is 1621x498, cropped
+  from a 1621x912 frame to rows 152-650, the span that holds the sign's
+  lettering at the top and the baby at the bottom. Because those two sit 430
+  rows apart, a band of fixed height letterboxes one of them away, so
+  `.band.has-photo` has no height: it takes `aspect-ratio: 1621 / 498` and
+  the whole photo is in frame at every width. Recrop and that ratio has to
+  change with it. It is under the 2000px a full-width banner really wants, so
+  it softens on a wide screen; replace it with the original if it turns up.
   The people in it are past Census managers who have agreed their photos may
   be used on the site, so faces are shown as taken. Any replacement needs the
   same agreement, or its faces cropped out or blurred. The band carries
