@@ -39,8 +39,9 @@
 .pinkbar a.pinkbar-back:focus-visible { color: #fff; text-decoration: underline; }
 .pinkbar a.pinkbar-back svg { display: block; width: 1em; height: 1em; fill: currentColor; }
 
-/* An in-page jump must not land under the bar. */
-html { scroll-padding-top: calc(var(--pinkbar-h) + 0.5rem); }
+/* An in-page jump must not land under the bar. Not on the landing page,
+   whose own top bar is the pink one and scrolls with the page. */
+html:has(.pinkbar) { scroll-padding-top: calc(var(--pinkbar-h) + 0.5rem); }
 
 /* ---- Quarto (2023-2025) ---- */
 /* Quarto measures its own fixed header and writes that height into body's

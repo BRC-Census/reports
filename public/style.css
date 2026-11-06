@@ -146,7 +146,7 @@ body.home {
   --h-rockwell: "RockwellStd", Rockwell, "Rockwell Nova", "Roboto Slab", serif;
   --h-lato: Lato, "Helvetica Neue", Arial, sans-serif;
   display: block;
-  padding: var(--pinkbar-h, 34px) 0 0;   /* room for the fixed pink bar */
+  padding: 0;
   color: var(--h-ink);
   font-family: "Open Sans", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
   line-height: 24px;
@@ -155,10 +155,12 @@ body.home {
 .home a:hover, .home a:focus { color: var(--h-link-hover); }
 .home p { line-height: 1.6; margin: 0 0 1.25rem; }
 
-/* Top bar (history site: #2f2f2f, 6px padding, logo where our name is) */
+/* Top bar (history site: 6px padding, logo where our name is, on #2f2f2f;
+   ours is Census pink instead, so it is this page's pink bar and there is
+   not a second, empty one stacked above it) */
 .topbar {
   display: flex; justify-content: space-between; align-items: center;
-  background: #2f2f2f; color: #fff;
+  background: var(--pinkbar-bg, #EA008B); color: #fff;
   padding: 0.6rem 20px; min-height: 52px;
 }
 .topbar a, .home .topbar a:hover {
@@ -176,7 +178,7 @@ body.home {
   line-height: 2.1; padding: 0 15px; border: 1px solid #c4400d; border-radius: 6px;
   color: #fff;
 }
-.tab-bar .pill { display: none; }
+.tab-bar .pill { display: none; border-color: #fff; }
 .menu-toggle {
   display: flex; align-items: center; gap: 0.5rem;
   border: 0; background: transparent; color: #fff; cursor: pointer; padding: 4px;
@@ -214,7 +216,6 @@ body.home {
 .home .sidenav-tools .pill { padding: 5px 15px; line-height: 1.5; }
 .home .sidenav-tools .pill:hover, .home .sidenav-tools .pill:focus { color: #fff; background: #484747; }
 @media (prefers-reduced-motion: reduce) { .sidenav, .menu-open .sidenav { transition: none; } }
-.sidenav, .sidenav-overlay { top: var(--pinkbar-h, 34px); }   /* clear of the fixed pink bar */
 
 /* Banner (history site: a full-width photo, at most 500px tall, with the
    section title centered 40% down in white with a dark shadow) */
