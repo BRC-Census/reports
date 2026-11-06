@@ -54,6 +54,11 @@ Notes for Claude and Woodie. Cross-project habits live in
   instead. The
   intro comes first in the HTML, so on phones it shows first and the list
   follows its closing "...check out the Census results through the years:".
+  The list is split in two at 2013, when the current weighted methodology
+  began: "Weighted Results" (2013 and later) on top, then "Earlier Reports"
+  (2012 and before) with a short `.archive-note` saying they are not
+  weighted results. Each section is an `<h3 class="archive-section">` over
+  its own `ul.reports`; `bin/add-year` inserts into the first list.
   The volunteer-team link points to https://volunteers.census.burningman.org/
   and the methodology link to its /training/welcome page.
 - `public/style.css` (outside the `.home` rules) copies the look of the 2025 Quarto report without its
