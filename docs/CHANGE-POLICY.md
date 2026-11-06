@@ -27,7 +27,7 @@ day it lands — nothing to register.
 | Zone | What | Rule |
 |---|---|---|
 | **Frozen** | Images, PDFs and data files (`.png .jpg .jpeg .gif .webp .avif .bmp .tif .tiff .pdf .epub .csv .tsv .xls .xlsx`) inside any `public/<dir>/`, and everything in `public/pdf/` except its `index.html` | Add freely. Never modify, delete or rename. |
-| **Page** | `.html` inside any `public/<dir>/` | Re-mark-up freely. The words a reader sees, the chart files the page points at, and the chart crop geometry must all survive. |
+| **Page** | `.html` inside any `public/<dir>/` | Re-mark-up freely. The report words a reader sees, the chart files the page points at, and the chart crop geometry must all survive. Navigation regions are not compared — see below. |
 | **Open** | `public/index.html`, `public/style.css`, `public/patch.js`, `public/pdf/index.html`, the icons and logos at the root of `public/`, generated CSS/JS/fonts/search indexes inside report folders, and everything outside `public/` (`bin/`, `docs/`, `.github/`, `README.md`) | Change as needed. |
 
 ## Always allowed
@@ -43,9 +43,15 @@ No exception, no discussion — this is the work the policy exists to protect:
   `decoding`, replacing a dead polyfill, dropping a vendor prefix, fixing a
   layout that breaks in a current browser.
 - **Navigation.** Menus, the Back link, skip links, breadcrumbs, a search box,
-  in-page anchors — including adding new visible nav text such as "Back" or
-  "Skip to content". The check allows text to be *added*; it only objects to
-  report text being changed, removed or reordered.
+  in-page anchors. The check skips navigation regions entirely when it
+  compares text — every `<nav>`, plus the containers that carry navigation
+  without being one: `.pinkbar`, bookdown's `.book-summary`/`.summary`/
+  `.navigation`, Quarto's sidebars and page navigation, and the 2018–2019
+  mirrors' `#ml-menu`. So nav text can be added, reworded, *or moved*. That
+  exclusion exists because the pink-bar change moved "Back" out of each
+  sidebar into a new top bar, and a text comparison reads a move as a deletion
+  plus an insertion. Elsewhere on the page the check allows text to be added
+  but objects to report text being changed, removed or reordered.
 - **Site chrome.** The landing page, `style.css`, `patch.js`, favicons, the
   PDF index, the deploy workflow, the build scripts in `bin/` and
   `.afterburn/`.
@@ -111,7 +117,8 @@ override is deliberate friction, not a veto.
 3. Say the same thing in the commit message.
 
 The line pins a SHA-256 of the file as you are committing it (`sha256:` for a
-frozen file, `page:` for a page's text, references and geometry together), so
+frozen file, `page:` for a page's non-navigation text, chart references and
+crop geometry together), so
 an exception covers that one change and nothing else. A later edit to the same
 file fails the check again and needs its own line, with its own reason. For a
 page, note that the pinned fingerprint covers the approved text — a further
@@ -133,11 +140,12 @@ It compares text, references and crop numbers. It cannot tell you whether:
 
 - new `alt` text actually describes the chart (and OCR'd alt text in the
   2013–2016 reports often does not);
+- a navigation change goes somewhere sensible, since nav text is deliberately
+  not protected — a report heading moved *into* a nav region stops being
+  compared;
 - a CSS change moved a chart's visible window without touching the inline
   `--crop` value;
 - a replacement image is the same chart;
-- a new nav link goes somewhere sensible.
-
 Those are a reviewer's job. The checklist below is the short version.
 
 ## Reviewer checklist

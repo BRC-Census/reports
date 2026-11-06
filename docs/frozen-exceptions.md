@@ -14,8 +14,8 @@ first half for you:
 ```
 
 `sha256:` is of the file as committed (for a deletion, of the file as it was).
-`page:` is of a page's visible words, chart references and crop geometry
-together. A reason of "WHY THIS HAD TO CHANGE" is rejected; write a real one.
+`page:` is of a page's visible words outside its navigation, together with its
+chart references and crop geometry. A reason of "WHY THIS HAD TO CHANGE" is rejected; write a real one.
 See `docs/CHANGE-POLICY.md`.
 
 ## Exceptions

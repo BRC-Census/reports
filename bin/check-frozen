@@ -56,6 +56,23 @@ OPEN_PUBLIC_FILES = {
 GEOMETRY = re.compile(r"--(w|h|crop|e|max)\s*:\s*([^;\"']+)")
 REF_ATTR = ("src", "href", "data-src", "poster")
 
+# Only these tags point at report content; <link rel=icon> and friends do not.
+REF_TAGS = {"img", "a", "source", "video", "object", "embed", "iframe"}
+
+# Navigation is chrome, and the policy says it may change freely -- including
+# being moved, which a text comparison would otherwise read as a deletion plus
+# an insertion. A <nav> element covers most of it: the hand-built pages use
+# <nav class="sidebar">, Quarto <nav id="quarto-sidebar"> and its page
+# navigation, the 2018-2019 mirrors <nav id="ml-menu">. These are the
+# containers that carry navigation without being a <nav>. Matched exactly
+# against one class value or an id, never as a substring: bookdown wraps the
+# whole book in class="book ... with-summary" and Quarto in
+# class="... page-navbar", and a substring match on those swallows the report.
+NAV_CLASSES = {"pinkbar", "book-summary", "summary", "navigation", "sidebar",
+               "sidenav", "topbar", "skiplink", "skip-link", "nav-page"}
+NAV_IDS = {"toc", "quarto-sidebar", "quarto-margin-sidebar", "ml-menu",
+           "sidebar", "nav"}
+
 
 def git(*args: str, ok: bool = False) -> str:
     p = subprocess.run(("git",) + args, cwd=REPO, capture_output=True, text=True)
@@ -83,6 +100,8 @@ class Visible(HTMLParser):
     """Words a reader sees, plus the asset refs and crop geometry."""
 
     SKIP = {"script", "style", "template"}
+    VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input",
+            "link", "meta", "param", "source", "track", "wbr"}
 
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
@@ -90,28 +109,64 @@ class Visible(HTMLParser):
         self.refs: list[str] = []
         self.geometry: list[str] = []
         self._skipping = 0
+        self._open: list[tuple[str, bool]] = []  # (tag, is_nav) stack
+        self._nav = 0
 
     def handle_starttag(self, tag, attrs):
         if tag in self.SKIP:
             self._skipping += 1
+        nav = tag == "nav" or self._is_nav(attrs)
+        if tag not in self.VOID:
+            self._open.append((tag, nav))
+            if nav:
+                self._nav += 1
+        if not nav and not self._nav:
+            self._collect(tag, attrs)
+
+    def handle_startendtag(self, tag, attrs):
+        if not self._nav:
+            self._collect(tag, attrs)
+
+    def handle_endtag(self, tag):
+        if tag in self.SKIP and self._skipping:
+            self._skipping -= 1
+        if tag in self.VOID:
+            return
+        for i in range(len(self._open) - 1, -1, -1):
+            if self._open[i][0] == tag:
+                self._nav -= sum(1 for _, n in self._open[i:] if n)
+                del self._open[i:]
+                return
+        # an unmatched </tag>: leave the stack alone rather than guess
+
+    def _collect(self, tag: str, attrs) -> None:
         for name, value in attrs:
             if not value:
                 continue
             if name == "style":
                 self.geometry += [f"{k}: {v.strip()}"
                                   for k, v in GEOMETRY.findall(value)]
+            if tag not in REF_TAGS:
+                continue
             if name == "srcset":
                 for cand in value.split(","):
                     self._ref(cand.strip().split(" ")[0])
             elif name in REF_ATTR:
                 self._ref(value.strip())
 
-    def handle_endtag(self, tag):
-        if tag in self.SKIP and self._skipping:
-            self._skipping -= 1
+    @staticmethod
+    def _is_nav(attrs) -> bool:
+        for name, value in attrs:
+            if not value:
+                continue
+            if name == "class" and NAV_CLASSES & set(value.lower().split()):
+                return True
+            if name == "id" and value.strip().lower() in NAV_IDS:
+                return True
+        return False
 
     def handle_data(self, data):
-        if not self._skipping:
+        if not self._skipping and not self._nav:
             self.words += data.split()
 
     def _ref(self, value: str) -> None:
