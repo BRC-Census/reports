@@ -17,7 +17,8 @@ Notes for Claude and Woodie. Cross-project habits live in
   line, hidden ", PDF" included, so nothing wraps). The landing page alone is
   styled after history.burningman.org's Census Archive page (November 2026:
   values read from its `burning-man-phoenix` theme's `css/app.css` and
-  `css/universal-navigation.css`): `#2f2f2f` top bar, a banner with the title
+  `css/universal-navigation.css`): their `#2f2f2f` top bar, in Census pink
+  here, a banner with the title
   in Stint Ultra Expanded (white, dark shadow), the page title in Rockwell
   `#2c5573` (the site's RockwellStd is self-hosted and licensed, so we fall
   back to Rockwell, then Roboto Slab), Open Sans 16px body in `#333`, links
@@ -29,14 +30,18 @@ Notes for Claude and Woodie. Cross-project habits live in
   twice: `public/census-seal-white.png` (the black-and-white seal, inverted
   to white, 40px) in the top bar, and `public/census-logo.png` (the pink
   logo, 150px, 110px on phones) floated beside the first paragraph.
-  The top bar works like the history site's: an outlined "Reports Archive"
-  pill (where their DONATE NOW sits; hidden on phones) and a MENU button
+  The top bar is Census pink (`--pinkbar-bg`), so it is this page's own
+  pink bar and there is no second, empty one stacked above it; its pill is
+  outlined in white, since the history site's rust `#c4400d` is muddy on
+  pink (the "Join the Census" pill in the slide-out panel keeps the rust).
+  Unlike the reports' bar it scrolls with the page, as it always did.
+  Otherwise the bar works like the history site's: an outlined "Reports
+  Archive" pill (where their DONATE NOW sits; hidden on phones) and a MENU
+  button
   that slides a 20.625rem panel in from the right (Lato uppercase links on
   `#2f2f2f`, a "Join the Census" pill below). A small inline script in
   index.html opens it; X, Escape or a click outside closes it. To change
   the menu's links, edit `<ul class="sidenav-list">` in index.html.
-  The panel and the overlay behind it start below the pink bar, so the
-  bar's Back link and the panel's X never sit on top of each other.
   The banner has a photo slot: put a wide photo at `public/banner.jpg`
   (at least 2000px wide, faces cropped out or blurred) and change the band
   to `<div class="band has-photo">`; until then the warm gradient shows. The
@@ -70,7 +75,9 @@ Notes for Claude and Woodie. Cross-project habits live in
   newest first, in the menu style. `bin/pdf-index` writes it; re-run it after
   adding or replacing a PDF.
 - `public/pinkbar.css` styles the Census pink (`#EA008B`) bar across the top
-  of every page on the site, which carries the "Back" link. The bar is
+  of every report page, which carries the "Back" link. (The landing page has
+  no separate bar: its own top bar is that pink. It still loads this file,
+  for `--pinkbar-bg`.) The bar is
   `position: fixed` and one line tall; its height is `--pinkbar-h` (34px),
   and every offset in the file is written in those units, so the height is
   set in one place and `@media print` zeroes it. Each report family's own
