@@ -1,0 +1,90 @@
+/* The Census pink bar across the top of every page on the site, carrying the
+   "Back" link that used to sit at the bottom of each report's left menu.
+
+   The bar is position: fixed, so it stays in view while a report scrolls, as
+   the old Back link did at the bottom of a sticky menu. Everything below is
+   measured in --pinkbar-h, so the bar's height is set in one place (and
+   zeroed for print).
+
+   Every page links this file. The prebuilt reports get it from patch.js,
+   which also tags <html> with the report family it found, so the rules here
+   can push that family's own fixed and absolute furniture down by the bar's
+   height. The pages built in this repo (the landing page, the PDF index and
+   the 2001-2017 reports) carry the bar in their HTML and take their offsets
+   from style.css, the one stylesheet they share. */
+
+:root {
+  --pinkbar-h: 34px;      /* one line of text */
+  --pinkbar-bg: #EA008B;  /* Census pink */
+}
+
+.pinkbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 10000;
+  box-sizing: border-box;
+  height: var(--pinkbar-h);
+  display: flex; align-items: center;
+  padding: 0 14px;
+  background: var(--pinkbar-bg);
+  /* Its own type, so a report's root font size can't change the bar's
+     height, and one line that never wraps. */
+  font: 600 14px/1 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  white-space: nowrap; overflow: hidden;
+}
+/* Two classes deep, to win over the link colors of five different reports. */
+.pinkbar a.pinkbar-back {
+  display: inline-flex; align-items: center; gap: 0.4em;
+  color: #fff; text-decoration: none;
+}
+.pinkbar a.pinkbar-back:hover,
+.pinkbar a.pinkbar-back:focus-visible { color: #fff; text-decoration: underline; }
+.pinkbar a.pinkbar-back svg { display: block; width: 1em; height: 1em; fill: currentColor; }
+
+/* An in-page jump must not land under the bar. Not on the landing page,
+   whose own top bar is the pink one and scrolls with the page. */
+html:has(.pinkbar) { scroll-padding-top: calc(var(--pinkbar-h) + 0.5rem); }
+
+/* ---- Quarto (2023-2025) ---- */
+/* Quarto measures its own fixed header and writes that height into body's
+   padding-top and the sidebar's top as inline styles, which it recomputes on
+   resize. So the bar's height is added on top of whatever that height is now
+   (patch.js keeps --quarto-header-h current) with !important, which outranks
+   a plain inline style. */
+html.pinkbar-quarto #quarto-header.fixed-top { top: var(--pinkbar-h); }
+html.pinkbar-quarto body {
+  padding-top: calc(var(--pinkbar-h) + var(--quarto-header-h, 0px)) !important;
+}
+html.pinkbar-quarto #quarto-sidebar.sidebar {
+  top: calc(var(--pinkbar-h) + var(--quarto-header-h, 0px)) !important;
+  max-height: calc(100vh - var(--pinkbar-h) - var(--quarto-header-h, 0px)) !important;
+}
+
+/* ---- bookdown / GitBook (2022) ---- */
+/* The menu and the page are both position: absolute from the top of the
+   viewport, so an in-flow bar would be covered; they get moved down instead. */
+html.pinkbar-gitbook .book > .book-summary,
+html.pinkbar-gitbook .book > .book-body { top: var(--pinkbar-h); }
+
+/* ---- 2018 and 2019 (Codrops multi-level menu) ---- */
+/* The page scrolls inside .container, which is 100vh tall on wide screens and
+   in normal flow below the theme's 60em breakpoint; the menu and the logo
+   block are fixed. */
+html.pinkbar-mlmenu body > .container { margin-top: var(--pinkbar-h); }
+@media screen and (min-width: 60.0625em) {
+  html.pinkbar-mlmenu body > .container { height: calc(100vh - var(--pinkbar-h)); }
+  html.pinkbar-mlmenu .dummy-logo { top: var(--pinkbar-h); }
+  html.pinkbar-mlmenu #ml-menu.menu {
+    top: calc(120px + var(--pinkbar-h));
+    height: calc(100vh - 120px - var(--pinkbar-h));
+  }
+}
+@media screen and (max-width: 60em) {
+  /* the full-height slide-in menu and the button that opens it */
+  html.pinkbar-mlmenu #ml-menu.menu { top: var(--pinkbar-h); height: calc(100vh - var(--pinkbar-h)); }
+  html.pinkbar-mlmenu .action--open { top: calc(1em + var(--pinkbar-h)); }
+}
+
+/* ---- Print: no bar, and every offset above falls back to nothing ---- */
+@media print {
+  :root { --pinkbar-h: 0px; }
+  .pinkbar { display: none; }
+}
