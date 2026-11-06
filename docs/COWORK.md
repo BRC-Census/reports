@@ -15,17 +15,22 @@ Notes for Claude and Woodie. Cross-project habits live in
   and the list of
   reports on the right under "Census Archive" (column sized to its longest
   line, hidden ", PDF" included, so nothing wraps). The landing page alone is
-  styled after burningman.org (October 2026, at Chipper's request, to support
-  asking for a burningman.org subdomain): black top bar, peach title band,
-  Bespoke Slab headings (burningman.org's own font, from Fontshare, with its
-  Rockwell/Roboto Slab fallbacks), Roboto body, links `#534be7`, and the list
-  as a ruled side menu like burningman.org's. Its rules are scoped to `.home`.
-  No Burning Man Project logo. The
+  styled after history.burningman.org's Census Archive page (November 2026:
+  values read from its `burning-man-phoenix` theme's `css/app.css` and
+  `css/universal-navigation.css`): `#2f2f2f` top bar, a banner with the title
+  in Stint Ultra Expanded (white, dark shadow), the page title in Rockwell
+  `#2c5573` (the site's RockwellStd is self-hosted and licensed, so we fall
+  back to Rockwell, then Roboto Slab), Open Sans 16px body in `#333`, links
+  `#1a64a8`, a 1000px column split 62.5% / 29%, the list as its cream
+  "section menu" (Barlow Semi Condensed, heading `#722426`, links `#996600`),
+  and a `#3c3c3c` footer in Lato. The page sets a 16px root
+  (`<html class="home-root">`), not the reports' 17px. Its rules are scoped
+  to `.home`. No Burning Man Project logo, and no history-site photo in the
+  banner (a plain warm gradient stands in). The
   intro comes first in the HTML, so on phones it shows first and the list
   follows its closing "...check out the Census results through the years:".
   The volunteer-team link points to https://volunteers.census.burningman.org/
   and the methodology link to its /training/welcome page.
-  The report list is still a `.sidebar` (sticky, scrolls), restyled under `.home`.
 - `public/style.css` (outside the `.home` rules) copies the look of the 2025 Quarto report without its
   Bootstrap layers: 17px root, Source Sans Pro, text `#343a40`, links
   `#2761e3`, headings weight 600 at Bootstrap's responsive sizes (h1 2rem, h2
