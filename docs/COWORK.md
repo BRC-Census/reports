@@ -107,6 +107,19 @@ Notes for Claude and Woodie. Cross-project habits live in
 - `public/patch.js` is the one script added to the prebuilt reports: it links
   `pinkbar.css`, tags `<html>` with the report family, and puts the bar and
   its Back link at the top of the page (see "Adding a new year").
+- `public/pinkbar-title.js` puts the name of the report being viewed on the
+  right of the pink bar, so a phone reader (whose report menu is hidden) can
+  tell which report it is. The name is never written into a page: the script
+  fetches the landing page and uses the link text of the entry whose `href`
+  points to this report's folder (in `ul.reports` first, then any link), so
+  renaming a report on the landing page renames it in the bar too. The name
+  is remembered in `sessionStorage` for the visit so it doesn't flicker in on
+  each page, then checked against the landing page again. If the landing page
+  can't be fetched (opened from a local file), the bar just shows Back.
+  `patch.js` loads it on the prebuilt reports; the pages built here (2001-2017)
+  load it with `<script src="../pinkbar-title.js" defer></script>` right after
+  their `pinkbar.css` link. The PDF index doesn't load it, as it isn't a
+  report.
 
 ## Editorial sources and conventions
 
@@ -293,9 +306,11 @@ sharing `public/style.css`. Goals, in priority order:
   font), so it doesn't use `patch.js` or `bin/add-year`. The builders in
   `.afterburn/` still emit the old Back item at the foot of the menu: update
   them before rebuilding a page, or the bar is lost. Copy the `<link
-  href="../pinkbar.css" rel="stylesheet">` line and the `<div class="pinkbar">`
+  href="../pinkbar.css" rel="stylesheet">` line, the `pinkbar-title.js`
+  `<script>` after it, and the `<div class="pinkbar">`
   that follows `<body>` from any page in `public/2005/`-`public/2017/`
-  (`bin/pdf-index`, which is in this repo, is already updated).
+  (`bin/pdf-index`, which is in this repo, is already updated; it has no
+  `pinkbar-title.js`, since the PDF index isn't a report).
 
 2001 and 2010 are the exceptions to "never reorder charts" (2010: see
 Structure above). Its old page was 43

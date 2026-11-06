@@ -34,10 +34,21 @@
 .pinkbar a.pinkbar-back {
   display: inline-flex; align-items: center; gap: 0.4em;
   color: #fff; text-decoration: none;
+  font-weight: inherit;   /* Quarto sets every link to 400 */
 }
 .pinkbar a.pinkbar-back:hover,
 .pinkbar a.pinkbar-back:focus-visible { color: #fff; text-decoration: underline; }
 .pinkbar a.pinkbar-back svg { display: block; width: 1em; height: 1em; fill: currentColor; }
+.pinkbar a.pinkbar-back { flex: none; }
+
+/* The report's name, at the right (pinkbar-title.js fills it in from the
+   landing page). A name too long for a narrow phone ends in "..." rather
+   than pushing Back off the bar. */
+.pinkbar .pinkbar-title {
+  margin-left: auto; padding-left: 1.5em;
+  min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  color: #fff;
+}
 
 /* An in-page jump must not land under the bar. Not on the landing page,
    whose own top bar is the pink one and scrolls with the page. */
