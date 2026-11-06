@@ -29,6 +29,12 @@ Notes for Claude and Woodie. Cross-project habits live in
   twice: `public/census-seal-white.png` (the black-and-white seal, inverted
   to white, 40px) in the top bar, and `public/census-logo.png` (the pink
   logo, 150px, 110px on phones) floated beside the first paragraph.
+  The top bar works like the history site's: an outlined "Reports Archive"
+  pill (where their DONATE NOW sits; hidden on phones) and a MENU button
+  that slides a 20.625rem panel in from the right (Lato uppercase links on
+  `#2f2f2f`, a "Join the Census" pill below). A small inline script in
+  index.html opens it; X, Escape or a click outside closes it. To change
+  the menu's links, edit `<ul class="sidenav-list">` in index.html.
   The banner has a photo slot: put a wide photo at `public/banner.jpg`
   (at least 2000px wide, faces cropped out or blurred) and change the band
   to `<div class="band has-photo">`; until then the warm gradient shows. The

@@ -12,7 +12,28 @@
 </head>
 <body class="home">
 
-<header class="topbar"><a href="./"><img class="seal" src="census-seal-white.png" width="40" height="40" alt="">BRC Census</a><span>Reports Archive</span></header>
+<header class="topbar">
+  <a href="./"><img class="seal" src="census-seal-white.png" width="40" height="40" alt="">BRC Census</a>
+  <nav class="tab-bar" aria-label="Site">
+    <span class="pill">Reports Archive</span>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="sidenav">
+      <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <span class="title">Menu</span>
+    </button>
+  </nav>
+</header>
+<div class="sidenav-overlay" hidden></div>
+<aside class="sidenav" id="sidenav" aria-label="Menu">
+  <div class="sidenav-close"><button type="button" aria-label="Close menu">X</button></div>
+  <ul class="sidenav-list">
+    <li><a href="./">Reports Archive</a></li>
+    <li><a href="pdf/">PDF Archive</a></li>
+    <li><a href="https://volunteers.census.burningman.org/training/welcome">Methodology</a></li>
+    <li><a href="https://volunteers.census.burningman.org/">Census Volunteers</a></li>
+    <li><a href="https://history.burningman.org/brc-history/census-data/">Census on Burning Man History</a></li>
+  </ul>
+  <div class="sidenav-tools"><a class="pill" href="https://volunteers.census.burningman.org/">Join the Census</a></div>
+</aside>
 <div class="band"><p class="band-title">Black Rock City Census</p></div>
 
 <div class="page">
@@ -61,6 +82,27 @@
   <a href="pdf/">PDF Archive</a>
 </footer>
 
+<script>
+// The MENU button slides the side panel in from the right, as on the
+// history site. X, Escape or a click outside the panel closes it.
+(function () {
+  var btn = document.querySelector(".menu-toggle");
+  var nav = document.getElementById("sidenav");
+  var overlay = document.querySelector(".sidenav-overlay");
+  function set(open) {
+    document.body.classList.toggle("menu-open", open);
+    btn.setAttribute("aria-expanded", open);
+    overlay.hidden = !open;
+    if (open) nav.querySelector("a").focus(); else btn.focus();
+  }
+  btn.addEventListener("click", function () { set(!document.body.classList.contains("menu-open")); });
+  nav.querySelector(".sidenav-close button").addEventListener("click", function () { set(false); });
+  overlay.addEventListener("click", function () { set(false); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && document.body.classList.contains("menu-open")) set(false);
+  });
+})();
+</script>
 </body>
 </html>
 

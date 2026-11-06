@@ -164,10 +164,53 @@ body.home {
 }
 .topbar a { display: inline-flex; align-items: center; gap: 0.6rem; }
 .topbar .seal { width: 40px; height: 40px; }
-.topbar span {
+/* Right side of the bar, like the history site's DONATE NOW pill and MENU
+   button (the pill hides on phones, as theirs does). */
+.tab-bar { display: flex; align-items: center; gap: 15px; }
+.home .pill {
+  display: inline-block;
   font-family: var(--h-lato); font-size: 0.9rem; text-transform: uppercase;
   line-height: 2.1; padding: 0 15px; border: 1px solid #c4400d; border-radius: 6px;
+  color: #fff;
 }
+.tab-bar .pill { display: none; }
+.menu-toggle {
+  display: flex; align-items: center; gap: 0.5rem;
+  border: 0; background: transparent; color: #fff; cursor: pointer; padding: 4px;
+  font-family: var(--h-lato); font-size: 15px; text-transform: uppercase;
+}
+.menu-toggle .title { display: none; }
+
+/* Slide-out menu (history site: 20.625rem wide, #4b4b4b panel, #2f2f2f list
+   with #6c6c6c rules, Lato 0.8rem uppercase links, 500ms slide). */
+.sidenav {
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 1003;
+  width: 20.625rem; max-width: 85vw; overflow-y: auto;
+  background: #4b4b4b;
+  box-shadow: -4px 0 4px rgba(0, 0, 0, 0.5);
+  transform: translate3d(100%, 0, 0); visibility: hidden;
+  transition: transform 500ms ease, visibility 0s linear 500ms;
+}
+.menu-open .sidenav { transform: none; visibility: visible; transition: transform 500ms ease; }
+.sidenav-overlay { position: fixed; inset: 0; z-index: 1002; cursor: pointer; }
+.sidenav-close { background: #2f2f2f; text-align: right; }
+.sidenav-close button {
+  border: 0; background: transparent; cursor: pointer;
+  padding: 11px 1.25rem; color: #989898;
+  font-family: var(--h-lato); font-size: 1.3125rem; font-weight: bold;
+}
+.sidenav-close button:hover, .sidenav-close button:focus-visible { color: #fff; }
+.sidenav-list { list-style: none; margin: 0; padding: 0; background: #2f2f2f; border-top: 1px solid #6c6c6c; }
+.sidenav-list li { border-bottom: 1px solid #6c6c6c; }
+.home .sidenav-list a {
+  display: block; padding: 14px 5% 12px;
+  color: #fff; font-family: var(--h-lato); font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;
+}
+.home .sidenav-list a:hover, .home .sidenav-list a:focus { background: #484747; color: #fff; }
+.sidenav-tools { background: #3c3c3c; padding: 2rem 1.5rem 2rem 1rem; text-align: center; }
+.home .sidenav-tools .pill { padding: 5px 15px; line-height: 1.5; }
+.home .sidenav-tools .pill:hover, .home .sidenav-tools .pill:focus { color: #fff; background: #484747; }
+@media (prefers-reduced-motion: reduce) { .sidenav, .menu-open .sidenav { transition: none; } }
 
 /* Banner (history site: a full-width photo, at most 500px tall, with the
    section title centered 40% down in white with a dark shadow) */
@@ -240,9 +283,11 @@ body.home {
 }
 @media only screen and (min-width: 40.063em) {
   .topbar { padding: 6px 20px; }
+  .tab-bar .pill { display: inline-block; }
   .home h1 { font-size: 1.9rem; }
 }
 @media only screen and (min-width: 64.063em) {
+  .menu-toggle .title { display: inline; }
   .home main { float: left; width: 62.5%; margin-left: 4.16667%; padding: 0 0.25rem; }
   .home .archive { float: right; width: 29.16667%; margin: 0.5rem 0 2rem 4.16667%; }
 }
