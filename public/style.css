@@ -272,6 +272,19 @@ body.home {
   font-family: "Barlow Semi Condensed", sans-serif; font-weight: normal;
   font-size: 1.8rem; line-height: 1.1; color: var(--h-menu-top);
 }
+/* The list splits at 2013, when the current weighted methodology began:
+   "Weighted Results" (2013 on), then "Earlier Reports" (2012 and before)
+   with a note that they are not weighted. Headings in the menu's dark red. */
+.archive-section {
+  margin: 0.5rem 0 0.4rem; padding: 0 5px 0 1.25rem; border: 0;
+  font-family: "Barlow Semi Condensed", sans-serif; font-weight: normal;
+  font-size: 1.5rem; line-height: 1.1; color: var(--h-menu-top);
+}
+.reports + .archive-section { margin-top: 1.25rem; }
+.home .archive-note {
+  margin: 0 0 0.6rem; padding: 0 5px 0 1.25rem;
+  font-size: 0.875rem; line-height: 1.4; color: #333;
+}
 .home .reports { list-style: none; margin: 0; padding: 0 5px 0 2rem; }
 .home .reports li { padding: 0 0 2px; }
 .home .reports a {
