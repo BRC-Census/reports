@@ -1,0 +1,408 @@
+#!/usr/bin/env python3
+"""Enforce docs/CHANGE-POLICY.md: what may and may not change in public/.
+
+Three zones, derived from the path (so a new year's folder is covered the
+day it lands):
+
+  frozen  report data -- chart images, PDFs, data files, inside any
+          public/<dir>/, plus everything in public/pdf/ except its
+          index.html. May be added; may not be modified, deleted or renamed.
+  page    .html inside any public/<dir>/. May be re-marked-up freely, but
+          the words a reader sees, the chart files it points at, and the
+          chart crop geometry must all survive.
+  open    everything else: the landing page, style.css, patch.js, generated
+          CSS/JS/fonts/search indexes, bin/, docs/, .github/.
+
+Usage:
+  bin/check-frozen                      # working tree vs origin/main
+  bin/check-frozen --base <ref>         # vs another base
+  bin/check-frozen --base A --head B    # two commits (what CI runs)
+  bin/check-frozen --propose            # print allowlist lines to paste
+
+Exit status 0 if clean, 1 if the policy is breached, 2 on a usage error.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import os
+import re
+import subprocess
+import sys
+from html.parser import HTMLParser
+
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+EXCEPTIONS = "docs/frozen-exceptions.md"
+PLACEHOLDER = "WHY THIS HAD TO CHANGE"
+POLICY = "docs/CHANGE-POLICY.md"
+
+# Report data: the numbers, charts and documents themselves.
+FROZEN_EXT = {
+    ".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".bmp", ".tif", ".tiff",
+    ".pdf", ".epub", ".csv", ".tsv", ".xls", ".xlsx",
+}
+PAGE_EXT = {".html", ".htm"}
+
+# Files under public/ that are site chrome, not an archived report.
+OPEN_PUBLIC_FILES = {
+    "public/index.html",
+    "public/style.css",
+    "public/patch.js",
+    "public/pdf/index.html",
+}
+
+# Inline custom properties that decide which slice of a chart image is shown.
+GEOMETRY = re.compile(r"--(w|h|crop|e|max)\s*:\s*([^;\"']+)")
+REF_ATTR = ("src", "href", "data-src", "poster")
+
+# Only these tags point at report content; <link rel=icon> and friends do not.
+REF_TAGS = {"img", "a", "source", "video", "object", "embed", "iframe"}
+
+# Navigation is chrome, and the policy says it may change freely -- including
+# being moved, which a text comparison would otherwise read as a deletion plus
+# an insertion. A <nav> element covers most of it: the hand-built pages use
+# <nav class="sidebar">, Quarto <nav id="quarto-sidebar"> and its page
+# navigation, the 2018-2019 mirrors <nav id="ml-menu">. These are the
+# containers that carry navigation without being a <nav>. Matched exactly
+# against one class value or an id, never as a substring: bookdown wraps the
+# whole book in class="book ... with-summary" and Quarto in
+# class="... page-navbar", and a substring match on those swallows the report.
+NAV_CLASSES = {"pinkbar", "book-summary", "summary", "navigation", "sidebar",
+               "sidenav", "topbar", "skiplink", "skip-link", "nav-page"}
+NAV_IDS = {"toc", "quarto-sidebar", "quarto-margin-sidebar", "ml-menu",
+           "sidebar", "nav"}
+
+
+def git(*args: str, ok: bool = False) -> str:
+    p = subprocess.run(("git",) + args, cwd=REPO, capture_output=True, text=True)
+    if p.returncode and not ok:
+        sys.stderr.write(p.stderr)
+        raise SystemExit(2)
+    return p.stdout
+
+
+def zone(path: str) -> str:
+    if not path.startswith("public/") or path in OPEN_PUBLIC_FILES:
+        return "open"
+    parts = path.split("/")
+    if len(parts) < 3:
+        return "open"  # a loose file at the root of public/ is site chrome
+    ext = os.path.splitext(path)[1].lower()
+    if ext in FROZEN_EXT:
+        return "frozen"
+    if ext in PAGE_EXT:
+        return "page"
+    return "open"
+
+
+class Visible(HTMLParser):
+    """Words a reader sees, plus the asset refs and crop geometry."""
+
+    SKIP = {"script", "style", "template"}
+    VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input",
+            "link", "meta", "param", "source", "track", "wbr"}
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.words: list[str] = []
+        self.refs: list[str] = []
+        self.geometry: list[str] = []
+        self._skipping = 0
+        self._open: list[tuple[str, bool]] = []  # (tag, is_nav) stack
+        self._nav = 0
+
+    def handle_starttag(self, tag, attrs):
+        if tag in self.SKIP:
+            self._skipping += 1
+        nav = tag == "nav" or self._is_nav(attrs)
+        if tag not in self.VOID:
+            self._open.append((tag, nav))
+            if nav:
+                self._nav += 1
+        if not nav and not self._nav:
+            self._collect(tag, attrs)
+
+    def handle_startendtag(self, tag, attrs):
+        if not self._nav:
+            self._collect(tag, attrs)
+
+    def handle_endtag(self, tag):
+        if tag in self.SKIP and self._skipping:
+            self._skipping -= 1
+        if tag in self.VOID:
+            return
+        for i in range(len(self._open) - 1, -1, -1):
+            if self._open[i][0] == tag:
+                self._nav -= sum(1 for _, n in self._open[i:] if n)
+                del self._open[i:]
+                return
+        # an unmatched </tag>: leave the stack alone rather than guess
+
+    def _collect(self, tag: str, attrs) -> None:
+        for name, value in attrs:
+            if not value:
+                continue
+            if name == "style":
+                self.geometry += [f"{k}: {v.strip()}"
+                                  for k, v in GEOMETRY.findall(value)]
+            if tag not in REF_TAGS:
+                continue
+            if name == "srcset":
+                for cand in value.split(","):
+                    self._ref(cand.strip().split(" ")[0])
+            elif name in REF_ATTR:
+                self._ref(value.strip())
+
+    @staticmethod
+    def _is_nav(attrs) -> bool:
+        for name, value in attrs:
+            if not value:
+                continue
+            if name == "class" and NAV_CLASSES & set(value.lower().split()):
+                return True
+            if name == "id" and value.strip().lower() in NAV_IDS:
+                return True
+        return False
+
+    def handle_data(self, data):
+        if not self._skipping and not self._nav:
+            self.words += data.split()
+
+    def _ref(self, value: str) -> None:
+        clean = value.split("?")[0].split("#")[0]
+        if os.path.splitext(clean)[1].lower() in FROZEN_EXT:
+            self.refs.append(clean)
+
+
+def parse_page(html: str) -> Visible:
+    v = Visible()
+    v.feed(html)
+    v.close()
+    return v
+
+
+def page_digest(v: Visible) -> str:
+    blob = "\n".join(v.words) + "\0" + "\n".join(v.refs)
+    blob += "\0" + "\n".join(sorted(v.geometry))
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+def missing_run(old: list[str], new: list[str], lead: int = 6,
+                span: int = 8) -> str | None:
+    """Where the original items stop being an in-order subsequence of the new."""
+    i = 0
+    for word in new:
+        if i < len(old) and word == old[i]:
+            i += 1
+    if i >= len(old):
+        return None
+    before = " ".join(old[max(0, i - lead):i])
+    lost = " ".join(old[i:i + span])
+    return (before + " >>> " if before else ">>> ") + lost
+
+
+# --- allowlist -------------------------------------------------------------
+
+ENTRY = re.compile(r"`([^`]+)`")
+DIGEST = re.compile(r"\b(sha256|page):([0-9a-f]{64})\b")
+
+
+def read_exceptions() -> dict[tuple[str, str], str]:
+    """{(path, digest): reason} from docs/frozen-exceptions.md."""
+    out: dict[tuple[str, str], str] = {}
+    full = os.path.join(REPO, EXCEPTIONS)
+    if not os.path.exists(full):
+        return out
+    with open(full, encoding="utf-8") as fh:
+        for raw in fh:
+            line = raw.strip()
+            if not line.startswith(("-", "*")):
+                continue
+            fields = ENTRY.findall(line)
+            digest = DIGEST.search(line)
+            if not fields or not digest:
+                continue
+            reason = line[digest.end():].lstrip(" `—-:–").strip()
+            if len(reason) < 8 or PLACEHOLDER in reason.upper():
+                continue  # an exception with no stated reason does not count
+            out[(fields[0].strip().lstrip("/"), digest.group(2))] = reason
+    return out
+
+
+# --- diff ------------------------------------------------------------------
+
+def resolve_base(base: str) -> str:
+    for ref in (base, f"origin/{base}", "origin/main", "main"):
+        if git("rev-parse", "--verify", "--quiet", ref, ok=True).strip():
+            merge = git("merge-base", "HEAD", ref, ok=True).strip()
+            return merge or ref
+    sys.stderr.write(f"check-frozen: cannot resolve a base ref from {base!r}\n")
+    raise SystemExit(2)
+
+
+def changes(base: str, head: str | None) -> list[tuple[str, str, str]]:
+    args = ["diff", "--name-status", "-M", base]
+    if head:
+        args.append(head)
+    rows = []
+    for line in git(*args).splitlines():
+        parts = line.split("\t")
+        status = parts[0]
+        if status.startswith("R") or status.startswith("C"):
+            rows.append((status[0], parts[2], parts[1]))
+        else:
+            rows.append((status, parts[1], ""))
+    return rows
+
+
+def blob(rev: str | None, path: str) -> bytes | None:
+    if rev is None:
+        full = os.path.join(REPO, path)
+        if not os.path.exists(full):
+            return None
+        with open(full, "rb") as fh:
+            return fh.read()
+    out = subprocess.run(["git", "show", f"{rev}:{path}"], cwd=REPO,
+                         capture_output=True)
+    return out.stdout if out.returncode == 0 else None
+
+
+def decode(data: bytes) -> str:
+    return data.decode("utf-8", errors="replace")
+
+
+# --- checks ----------------------------------------------------------------
+
+class Breach:
+    def __init__(self, path: str, kind: str, detail: str, digest: str) -> None:
+        self.path, self.kind, self.detail, self.digest = path, kind, detail, digest
+
+    def line(self) -> str:
+        label = "sha256" if self.kind == "frozen" else "page"
+        return (f"- `{self.path}` `{label}:{self.digest}` — WHY THIS HAD TO "
+                f"CHANGE (who approved it, date)")
+
+
+def check_frozen(path: str, status: str, base: str, head: str | None,
+                 old_path: str) -> Breach | None:
+    if status == "D":
+        was = blob(base, path)
+        return Breach(path, "frozen", "deleted; published report data",
+                      hashlib.sha256(was).hexdigest() if was else "")
+    data = blob(head, path)
+    if data is None:
+        return Breach(path, "frozen", "unreadable in the new tree", "")
+    digest = hashlib.sha256(data).hexdigest()
+    if status == "R":
+        return Breach(path, "frozen",
+                      f"renamed from {old_path}; the old URL stops working",
+                      digest)
+    return Breach(path, "frozen", "modified; published report data", digest)
+
+
+def check_page(path: str, status: str, base: str, head: str | None,
+               old_path: str) -> Breach | None:
+    if status == "D":
+        was = blob(base, path)
+        return Breach(path, "page", "deleted; a published report page",
+                      page_digest(parse_page(decode(was))) if was else "")
+    old_raw, new_raw = blob(base, path), blob(head, path)
+    if status == "R":
+        return Breach(path, "page",
+                      f"renamed from {old_path}; the old URL stops working",
+                      page_digest(parse_page(decode(new_raw))) if new_raw else "")
+    if old_raw is None or new_raw is None:
+        return Breach(path, "page", "cannot read both versions to compare", "")
+    old, new = parse_page(decode(old_raw)), parse_page(decode(new_raw))
+    digest = page_digest(new)
+
+    lost = missing_run(old.words, new.words)
+    if lost is not None:
+        return Breach(path, "page",
+                      f"report wording changed, removed or reordered: “{lost}”",
+                      digest)
+    dropped = missing_run(old.refs, new.refs, lead=1, span=3)
+    if dropped is not None:
+        return Breach(path, "page",
+                      f"chart image references removed or repointed: \u201c{dropped}\u201d",
+                      digest)
+    old_geo, new_geo = sorted(old.geometry), sorted(new.geometry)
+    for value in old_geo:
+        if new_geo.count(value) < old_geo.count(value):
+            return Breach(path, "page",
+                          f"chart crop geometry changed (lost “{value}”)",
+                          digest)
+    return None
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(add_help=True, description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--base", default="origin/main",
+                    help="base ref to compare against (default origin/main)")
+    ap.add_argument("--head", default=None,
+                    help="head commit; omit to check the working tree")
+    ap.add_argument("--propose", action="store_true",
+                    help="print allowlist lines for every breach found")
+    args = ap.parse_args()
+
+    base = args.base if args.head else resolve_base(args.base)
+    rows = changes(base, args.head)
+    allowed = read_exceptions()
+
+    breaches: list[Breach] = []
+    approved: list[tuple[str, str]] = []
+    counts = {"frozen": 0, "page": 0, "open": 0, "added": 0}
+
+    for status, path, old_path in rows:
+        z = zone(path)
+        if z == "open":
+            counts["open"] += 1
+            continue
+        if status in ("A", "C"):
+            counts["added"] += 1
+            continue
+        breach = (check_frozen if z == "frozen" else check_page)(
+            path, status, base, args.head, old_path)
+        if breach is None:
+            counts[z] += 1
+            continue
+        key = (path, breach.digest)
+        if breach.digest and key in allowed:
+            approved.append((path, allowed[key]))
+            continue
+        breaches.append(breach)
+
+    shown = base[:12] if re.fullmatch(r"[0-9a-f]{40}", base) else base
+    print(f"check-frozen: base {shown}, {len(rows)} path(s) changed")
+    print(f"  open {counts['open']}  added {counts['added']}  "
+          f"frozen-ok {counts['frozen']}  page-ok {counts['page']}  "
+          f"allowlisted {len(approved)}  breaches {len(breaches)}")
+    for path, reason in approved:
+        print(f"  allowlisted: {path} — {reason}")
+
+    if not breaches:
+        print("OK: published report data is intact.")
+        return 0
+
+    print(f"\nFAILED: {len(breaches)} change(s) breach {POLICY}\n")
+    for b in breaches:
+        print(f"  {b.path}\n      {b.detail}")
+    print(f"\nFix the change, or -- if it is genuinely needed -- add a line to "
+          f"{EXCEPTIONS}:")
+    for b in breaches:
+        if b.digest:
+            print("  " + b.line())
+        else:
+            print(f"  {b.path}: cannot be fingerprinted; see {POLICY}.")
+    if args.propose:
+        print("\n--- paste into " + EXCEPTIONS + " ---")
+        for b in breaches:
+            if b.digest:
+                print(b.line())
+    return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
