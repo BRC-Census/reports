@@ -176,7 +176,8 @@ body.home {
 .tab-bar .pill { display: none; }
 .menu-toggle {
   display: flex; align-items: center; gap: 0.5rem;
-  border: 0; background: transparent; color: #fff; cursor: pointer; padding: 4px;
+  border: 0; background: transparent; color: #fff; cursor: pointer;
+  min-width: 44px; min-height: 44px; padding: 4px 8px; justify-content: center;   /* a full 44px tap target on phones */
   font-family: var(--h-lato); font-size: 15px; text-transform: uppercase;
 }
 .menu-toggle .title { display: none; }
@@ -257,7 +258,7 @@ body.home {
 }
 
 .home .archive {
-  margin: 1rem 0.25rem 2rem;
+  margin: 1rem 1rem 2rem;   /* edges line up with the intro text on phones */
   background: linear-gradient(to right, #fcfbf9 0%, rgba(252, 251, 249, 0) 100%);
   border-top: 2px solid #ece4d8; border-bottom: 2px solid #ece4d8;
   padding-bottom: 1rem;
