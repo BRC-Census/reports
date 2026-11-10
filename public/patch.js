@@ -1,7 +1,8 @@
 /* The one script added to the prebuilt reports (2018, 2019 and the
    bookdown/Quarto builds) by bin/add-year. It links pinkbar.css, tags <html>
    with the report family so pinkbar.css can offset that family's layout, and
-   puts the Census pink bar, with its "Back" link, at the top of the page.
+   puts the Census pink bar, with its "Back" link, at the top of the page,
+   then loads pinkbar-title.js to put the report's name on its right.
    The reports built in this repo carry the bar in their own HTML instead. */
 (function () {
   var home = new URL("../", document.baseURI).href;
@@ -43,5 +44,10 @@
     bar.className = "pinkbar";
     bar.appendChild(back);
     document.body.insertBefore(bar, document.body.firstChild);
+
+    // The report's name, on the bar's right (pinkbar-title.js).
+    var title = document.createElement("script");
+    title.src = home + "pinkbar-title.js";
+    document.body.appendChild(title);
   });
 })();
