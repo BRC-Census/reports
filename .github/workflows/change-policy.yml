@@ -1,0 +1,37 @@
+name: Change policy
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-frozen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Published report data is unchanged
+        env:
+          PR_BASE: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          if [ -n "${PR_BASE:-}" ]; then
+            base=$PR_BASE; head=$PR_HEAD
+          elif [ -n "${PUSH_BEFORE:-}" ] &&
+               [ "$PUSH_BEFORE" != "0000000000000000000000000000000000000000" ] &&
+               git cat-file -e "$PUSH_BEFORE^{commit}" 2>/dev/null; then
+            base=$PUSH_BEFORE; head=${{ github.sha }}
+          else
+            echo "No usable base commit (new branch or forced push); nothing to compare."
+            exit 0
+          fi
+          echo "Comparing $base...$head"
+          bin/check-frozen --base "$base" --head "$head"

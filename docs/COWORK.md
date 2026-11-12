@@ -3,6 +3,16 @@
 Notes for Claude and Woodie. Cross-project habits live in
 `~/workspace/woodie/docs/COWORK.md`.
 
+## What may change
+
+`docs/CHANGE-POLICY.md` is the rule: presentation is ours to improve,
+published findings are not ours to rewrite. Report images, PDFs and the words
+and numbers on a report page are frozen; markup, CSS, navigation and
+accessibility around them are not. `bin/check-frozen` enforces it on every
+pull request, and `docs/frozen-exceptions.md` logs every deliberate change to
+published data. Read the policy before editing anything under
+`public/<year>/`.
+
 ## Layout
 
 - `public/` is the published site; everything else in the repo stays private.
